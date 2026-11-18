@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Away Essay Workshop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shrikhand&family=Karla:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Layout idea: a 1967 holiday postcard. Sea-mist page, white "postcards", one colour per theme: storm (suffering), bonfire (relationships), water (transformation). */
+  --page:#eaf1ef;
+  --card:#ffffff;
+  --ink:#152a31;
+  --muted:#4d6268;
+  --line:#c9d8d5;
+  --sea:#0b5563;
+  --sun:#f2b632;
+  --storm:#4a4f8c;
+  --fire:#c8521f;
+  --water:#127a78;
+  --good:#2f7d3a;
+  --bad:#b23a3a;
+  --display:"Shrikhand", Georgia, serif;
+  --body:"Karla", "Helvetica Neue", Arial, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+  color-scheme: light;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--page);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55}
+h1,h2,h3{text-wrap:balance;line-height:1.15;margin:0}
+h2{font-family:var(--display);font-weight:400;font-size:2rem;color:var(--sea)}
+h3{font-size:1.15rem}
+p{margin:0}
+button,select,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+a{color:var(--sea)}
+
+/* Header */
+.top{background:var(--sea);color:#fff;position:relative;overflow:hidden}
+.top::after{content:"";position:absolute;left:0;right:0;bottom:0;height:14px;
+  background:repeating-linear-gradient(90deg,var(--sun) 0 40px,var(--fire) 40px 80px,var(--water) 80px 120px,var(--storm) 120px 160px)}
+.top-in{max-width:1180px;margin:0 auto;padding:22px 20px 30px;display:flex;gap:20px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.brand{display:flex;flex-direction:column;gap:2px}
+.brand .eyebrow{font-family:var(--mono);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;opacity:.85}
+.brand h1{font-family:var(--display);font-weight:400;font-size:2.4rem;color:#fff}
+.brand h1 span{color:var(--sun)}
+.xpbox{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);border-radius:12px;padding:10px 14px;min-width:280px}
+.xprow{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.8rem;gap:12px}
+.xpbar{height:10px;background:rgba(255,255,255,.2);border-radius:6px;margin-top:6px;overflow:hidden}
+.xpbar i{display:block;height:100%;background:var(--sun);width:0;transition:width .5s}
+.lvl{font-weight:700;font-size:1rem;font-family:var(--body)}
+
+nav.tabs{background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+nav.tabs .in{max-width:1180px;margin:0 auto;padding:0 12px;display:flex;gap:2px;overflow-x:auto}
+nav.tabs a{padding:14px 14px 12px;text-decoration:none;color:var(--muted);font-weight:600;white-space:nowrap;border-bottom:3px solid transparent}
+nav.tabs a:hover{color:var(--ink)}
+nav.tabs a[aria-current="page"]{color:var(--sea);border-bottom-color:var(--sun)}
+
+main{max-width:1180px;margin:0 auto;padding:28px 20px 80px}
+section.view{display:none;flex-direction:column;gap:22px}
+section.view.on{display:flex}
+.lede{max-width:68ch;color:var(--muted)}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+.grid{display:grid;gap:16px}
+.g3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.g2{grid-template-columns:repeat(auto-fit,minmax(340px,1fr))}
+
+.btn{border:2px solid var(--sea);background:var(--sea);color:#fff;border-radius:999px;padding:8px 16px;font-weight:700;cursor:pointer;transition:transform .1s}
+.btn:hover{transform:translateY(-1px)}
+.btn.ghost{background:transparent;color:var(--sea)}
+.btn.small{padding:4px 12px;font-size:.88rem}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+
+/* theme colouring */
+.th-S{--tc:var(--storm)} .th-R{--tc:var(--fire)} .th-T{--tc:var(--water)}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:2px 10px;font-size:.8rem;font-weight:700;color:#fff;background:var(--tc)}
+.chip{display:inline-block;border:1px solid var(--line);border-radius:6px;padding:1px 8px;font-size:.8rem;font-family:var(--mono);background:var(--page);cursor:help}
+button.chip{cursor:pointer}
+button.chip:hover{border-color:var(--sea)}
+.stripe{border-left:6px solid var(--tc)}
+
+/* home */
+.hero{display:grid;grid-template-columns:1.4fr 1fr;gap:18px}
+@media (max-width:820px){.hero{grid-template-columns:1fr}}
+.quest{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px dashed var(--line)}
+.quest:last-child{border-bottom:0}
+.tick{flex:0 0 26px;height:26px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-weight:700;color:#fff}
+.quest.done .tick{background:var(--good);border-color:var(--good)}
+.quest small{color:var(--muted);display:block}
+.badges{display:flex;flex-wrap:wrap;gap:10px}
+.badge{border:2px dashed var(--line);border-radius:12px;padding:8px 12px;font-size:.85rem;color:var(--muted);min-width:130px}
+.badge.got{border-style:solid;border-color:var(--sun);background:#fff8e6;color:var(--ink)}
+.badge b{display:block;font-size:.95rem}
+.themecard h3{font-family:var(--display);font-weight:400;font-size:1.4rem;color:var(--tc)}
+.themecard blockquote{margin:10px 0;font-style:italic}
+.themecard{display:flex;flex-direction:column;gap:8px;border-top:8px solid var(--tc)}
+
+/* quotes */
+.filters{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.filters select,.filters input{border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:var(--card)}
+.filters input{flex:1;min-width:200px}
+.seg{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--card)}
+.seg button{border:0;background:transparent;padding:7px 12px;cursor:pointer;font-weight:600;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--sea);color:#fff}
+.qcard{display:flex;flex-direction:column;gap:10px}
+.qcard .q{font-size:1.08rem;font-weight:600;line-height:1.45}
+.qcard .q::before{content:"\201C";color:var(--tc);font-family:var(--display);font-size:1.6rem;line-height:0;vertical-align:-.35em;margin-right:2px}
+.meta{font-family:var(--mono);font-size:.78rem;color:var(--muted)}
+.qcard .an{font-size:.95rem;color:var(--ink);background:var(--page);border-radius:8px;padding:10px 12px}
+.row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.spread{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+.star{background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;font-weight:700;color:var(--muted)}
+.star[aria-pressed="true"]{background:var(--sun);border-color:var(--sun);color:var(--ink)}
+.count{font-family:var(--mono);font-size:.85rem;color:var(--muted)}
+
+/* theses */
+.tlist{display:flex;flex-direction:column;gap:10px}
+.titem{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+.titem p{flex:1}
+.titem .acts{display:flex;flex-direction:column;gap:6px;flex:0 0 auto}
+.mine{background:#fff8e6;border-color:var(--sun)}
+.topicq{margin-top:6px;display:flex;flex-wrap:wrap;gap:6px}
+
+/* forge */
+.forge{display:grid;grid-template-columns:1.05fr 1fr;gap:18px;align-items:start}
+@media (max-width:900px){.forge{grid-template-columns:1fr}}
+.step{display:flex;flex-direction:column;gap:8px;padding:14px;border-radius:12px;background:var(--card);border:1px solid var(--line)}
+.step .lab{display:flex;align-items:center;gap:10px}
+.letter{font-family:var(--display);font-size:1.5rem;color:#fff;background:var(--sea);width:40px;height:40px;border-radius:10px;display:grid;place-items:center;flex:0 0 40px}
+.step textarea{width:100%;min-height:76px;border:1px solid var(--line);border-radius:8px;padding:10px;resize:vertical;background:#fbfdfc}
+.step select{border:1px solid var(--line);border-radius:8px;padding:8px;background:var(--card);max-width:100%}
+.hint{font-size:.88rem;color:var(--muted)}
+.preview{position:sticky;top:64px;display:flex;flex-direction:column;gap:14px}
+.para{font-size:1rem;line-height:1.7;min-height:120px}
+.para .P{background:#e3e8f6}.para .E{background:#fde6d9}.para .T{background:#dcefee}.para .A{background:#fff1c8}.para .L{background:#e6efe1}
+.para span{border-radius:4px;padding:1px 2px}
+.checks{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;font-size:.9rem}
+@media (max-width:480px){.checks{grid-template-columns:1fr}}
+.ck{display:flex;gap:8px;align-items:flex-start}
+.ck i{font-style:normal;flex:0 0 20px;height:20px;border-radius:50%;display:grid;place-items:center;font-size:.75rem;color:#fff;background:var(--line)}
+.ck.ok i{background:var(--good)}
+.meter{display:flex;gap:4px}
+.meter b{flex:1;height:12px;border-radius:3px;background:var(--line)}
+.meter b.on{background:var(--sun)}
+.band{font-family:var(--display);font-size:1.4rem;color:var(--sea)}
+.legend{display:flex;flex-wrap:wrap;gap:6px;font-size:.78rem;font-family:var(--mono)}
+.legend span{padding:1px 8px;border-radius:4px}
+
+/* games */
+.gamepick{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.gcard{text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:6px;border:2px solid var(--line);background:var(--card);border-radius:14px;padding:16px}
+.gcard:hover{border-color:var(--sea)}
+.gcard[aria-pressed="true"]{border-color:var(--sun);background:#fff8e6}
+.gcard h3{font-family:var(--display);font-weight:400;color:var(--sea);font-size:1.3rem}
+.stage{min-height:300px}
+.opts{display:grid;gap:10px;margin-top:14px}
+.opt{text-align:left;border:2px solid var(--line);background:var(--card);border-radius:10px;padding:12px 14px;cursor:pointer;font-weight:600}
+.opt:hover:not(:disabled){border-color:var(--sea)}
+.opt.right{border-color:var(--good);background:#e8f4ea}
+.opt.wrong{border-color:var(--bad);background:#f8e7e7}
+.opt:disabled{cursor:default}
+.fb{margin-top:12px;padding:12px 14px;border-radius:10px;background:var(--page)}
+.gq{font-size:1.2rem;font-weight:600;font-style:italic;margin-top:8px}
+.score{font-family:var(--mono);font-size:.9rem;color:var(--muted)}
+.puzzle{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.pz{text-align:left;border:2px solid var(--line);background:var(--card);border-radius:10px;padding:10px 12px;cursor:pointer;display:flex;gap:10px}
+.pz:hover:not(:disabled){border-color:var(--sea)}
+.pz .slot{flex:0 0 30px;height:30px;border-radius:8px;background:var(--page);display:grid;place-items:center;font-family:var(--display);color:var(--sea)}
+.pz.placed{border-color:var(--sea);background:#f2f7f6}
+.pz.placed .slot{background:var(--sea);color:#fff}
+.pz.right{border-color:var(--good)} .pz.wrong{border-color:var(--bad)}
+
+/* planner */
+.plan{display:flex;flex-direction:column;gap:14px}
+.plan textarea{width:100%;min-height:90px;border:1px solid var(--line);border-radius:8px;padding:10px;background:#fbfdfc}
+.plan select{border:1px solid var(--line);border-radius:8px;padding:8px;background:var(--card);width:100%}
+.essay{white-space:pre-wrap;line-height:1.7;font-size:.98rem}
+
+/* module */
+.ladder{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.ladder .card h3{color:var(--sea)}
+table.verbs{border-collapse:collapse;width:100%;font-size:.95rem}
+table.verbs td{border-top:1px solid var(--line);padding:8px 6px;vertical-align:top}
+table.verbs td:first-child{font-family:var(--display);color:var(--sea);font-size:1.3rem;width:46px}
+
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(120px);background:var(--ink);color:#fff;padding:12px 18px;border-radius:12px;font-weight:700;transition:transform .3s;z-index:20;max-width:90vw}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast b{color:var(--sun)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <div class="brand">
+      <span class="eyebrow">Year 12 Common Module · Texts and Human Experiences</span>
+      <h1>Away <span>Essay Workshop</span></h1>
+    </div>
+    <div class="xpbox" aria-live="polite">
+      <div class="xprow"><span class="lvl" id="lvlName">Packing Up</span><span id="xpText">0 XP</span></div>
+      <div class="xpbar"><i id="xpFill"></i></div>
+      <div class="xprow" style="margin-top:4px"><span id="nextLvl">Next: On the Road</span><span id="lvlNum">Level 1</span></div>
+    </div>
+  </div>
+</header>
+<nav class="tabs" aria-label="Sections"><div class="in">
+  <a href="#home">Base Camp</a>
+  <a href="#quotes">Quote Bank</a>
+  <a href="#theses">Thesis &amp; Topic Sentences</a>
+  <a href="#forge">PETAL Forge</a>
+  <a href="#games">Games</a>
+  <a href="#planner">Essay Planner</a>
+  <a href="#module">Know the Module</a>
+</div></nav>
+
+<main>
+<!-- HOME -->
+<section class="view" id="v-home">
+  <div class="hero">
+    <div class="card" style="display:flex;flex-direction:column;gap:12px">
+      <h2>Your holiday starts here</h2>
+      <p class="lede">Three families go away for the summer of 1967. Your job is to explain what Gow shows us about suffering, relationships and transformation. Work through the missions to earn XP and build a full essay as you go.</p>
+      <div id="quests"></div>
+    </div>
+    <div class="card" style="display:flex;flex-direction:column;gap:12px">
+      <h3>Badges</h3>
+      <div class="badges" id="badges"></div>
+      <p class="hint">Your progress is kept in this browser only. If you switch devices, use the Copy buttons to take your work with you.</p>
+    </div>
+  </div>
+  <h2>Your three themes</h2>
+  <div class="grid g3" id="themeCards"></div>
+</section>
+
+<!-- QUOTES -->
+<section class="view" id="v-quotes">
+  <div><h2>Quote Bank</h2>
+  <p class="lede">Every quote has been checked against the play. Star the ones you want to learn. Starred quotes appear first in the PETAL Forge. Hover over a technique to see what it means.</p></div>
+  <div class="filters">
+    <div class="seg" role="group" aria-label="Theme" id="qTheme">
+      <button aria-pressed="true" data-v="">All</button><button data-v="S">Suffering</button><button data-v="R">Relationships</button><button data-v="T">Transformation</button><button data-v="*">★ Starred</button>
+    </div>
+    <label class="sr" for="qAct" hidden>Act</label>
+    <select id="qAct" aria-label="Act"><option value="">All acts</option><option>Act 1</option><option>Act 2</option><option>Act 3</option><option>Act 4</option><option>Act 5</option></select>
+    <select id="qWho" aria-label="Character"><option value="">All characters</option></select>
+    <select id="qTech" aria-label="Technique"><option value="">All techniques</option></select>
+    <input id="qSearch" type="search" placeholder="Search words in quotes or analysis" aria-label="Search quotes">
+  </div>
+  <div class="count" id="qCount"></div>
+  <div class="grid g2" id="qList"></div>
+</section>
+
+<!-- THESES -->
+<section class="view" id="v-theses">
+  <div><h2>Thesis &amp; Topic Sentences</h2>
+  <p class="lede">A thesis is your whole argument in one sentence. Each topic sentence is one step of that argument and becomes the P in a PETAL paragraph. Choose a thesis to make it yours, then send a topic sentence to the Forge to build a paragraph around it.</p></div>
+  <div class="card" style="display:flex;flex-direction:column;gap:12px">
+    <h3>Overall theses that bring all three themes together</h3>
+    <div class="tlist" id="overallList"></div>
+  </div>
+  <div class="seg" role="group" aria-label="Theme" id="tTheme" style="align-self:flex-start">
+    <button aria-pressed="true" data-v="S">Suffering</button><button data-v="R">Relationships</button><button data-v="T">Transformation</button>
+  </div>
+  <div class="grid g2">
+    <div class="card" style="display:flex;flex-direction:column;gap:12px"><h3 id="tThesisHead">Theme theses</h3><div class="tlist" id="themeThesisList"></div></div>
+    <div class="card" style="display:flex;flex-direction:column;gap:12px"><h3>Topic sentences with suggested quotes</h3><div class="tlist" id="topicList"></div></div>
+  </div>
+  <div class="card" style="display:flex;flex-direction:column;gap:10px">
+    <h3>Write your own thesis</h3>
+    <p class="hint">A strong thesis names Gow, makes a debatable claim about human experience and hints at how the play shows it. Try: "Through ___, Gow suggests that ___, revealing ___."</p>
+    <textarea id="ownThesis" rows="3" style="width:100%;border:1px solid var(--line);border-radius:8px;padding:10px" aria-label="Your own thesis"></textarea>
+    <div><button class="btn small" id="saveOwnThesis">Make this my thesis</button></div>
+  </div>
+</section>
+
+<!-- FORGE -->
+<section class="view" id="v-forge">
+  <div><h2>PETAL Forge</h2>
+  <p class="lede">Build one body paragraph at a time. Fill each step and watch your paragraph come together on the right. The checker shows what a marker looks for. Save a paragraph to use it in your Essay Planner.</p></div>
+  <div class="forge">
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div class="step">
+        <label for="fTheme"><b>Theme for this paragraph</b></label>
+        <select id="fTheme"><option value="S">The universality of suffering</option><option value="R">The complexity of human relationships</option><option value="T">Transformation</option></select>
+      </div>
+      <div class="step">
+        <div class="lab"><span class="letter">P</span><div><b>Point</b><div class="hint">Your topic sentence: one clear argument about the theme that answers the question.</div></div></div>
+        <select id="fTopicPick" aria-label="Pick a topic sentence"><option value="">Choose a ready-made topic sentence, or write your own below</option></select>
+        <textarea id="fP" aria-label="Point"></textarea>
+      </div>
+      <div class="step">
+        <div class="lab"><span class="letter">E</span><div><b>Evidence</b><div class="hint">Choose a quote, then embed it in your own sentence. Don't drop it in on its own line.</div></div></div>
+        <select id="fQuote" aria-label="Choose a quote"></select>
+        <div class="row" id="fLeadIns"></div>
+        <textarea id="fE" aria-label="Evidence"></textarea>
+      </div>
+      <div class="step">
+        <div class="lab"><span class="letter">T</span><div><b>Technique</b><div class="hint">Name the technique and say what it does. Click a technique to add a starter.</div></div></div>
+        <div class="row" id="fTechs"></div>
+        <textarea id="fT" aria-label="Technique"></textarea>
+      </div>
+      <div class="step">
+        <div class="lab"><span class="letter">A</span><div><b>Analysis</b><div class="hint">Explain why Gow does this. What does it reveal about people and human experience? Bring in context.</div></div></div>
+        <div class="hint" id="fAnalysisNote"></div>
+        <div class="row" id="fVerbs"></div>
+        <textarea id="fA" aria-label="Analysis" style="min-height:110px"></textarea>
+      </div>
+      <div class="step">
+        <div class="lab"><span class="letter">L</span><div><b>Link</b><div class="hint">Tie the paragraph back to your thesis and the question.</div></div></div>
+        <div class="row" id="fLinks"></div>
+        <textarea id="fL" aria-label="Link"></textarea>
+      </div>
+    </div>
+    <div class="preview">
+      <div class="card" style="display:flex;flex-direction:column;gap:12px">
+        <div class="spread"><h3>Your paragraph</h3><span class="count" id="fWords">0 words</span></div>
+        <div class="legend"><span class="P" style="background:#e3e8f6">Point</span><span style="background:#fde6d9">Evidence</span><span style="background:#dcefee">Technique</span><span style="background:#fff1c8">Analysis</span><span style="background:#e6efe1">Link</span></div>
+        <div class="para" id="fPreview"></div>
+        <div class="row">
+          <button class="btn small" id="fSave">Save paragraph</button>
+          <button class="btn small ghost" id="fCopy">Copy</button>
+          <button class="btn small ghost" id="fModel">Show a model paragraph</button>
+          <button class="btn small ghost" id="fClear">Clear</button>
+        </div>
+      </div>
+      <div class="card" style="display:flex;flex-direction:column;gap:10px">
+        <div class="spread"><h3>Marker's checklist</h3><span class="band" id="fBand">Getting started</span></div>
+        <div class="meter" id="fMeter"></div>
+        <div class="checks" id="fChecks"></div>
+      </div>
+      <div class="card" style="display:flex;flex-direction:column;gap:10px">
+        <h3>Saved paragraphs</h3>
+        <div id="fSaved" class="tlist"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GAMES -->
+<section class="view" id="v-games">
+  <div><h2>Games</h2><p class="lede">Each correct answer earns 10 XP. Pick a game to start.</p></div>
+  <div class="gamepick" id="gamePick">
+    <button class="gcard" data-g="tech"><h3>Technique Detective</h3><span>Name the technique at work in each quote.</span><span class="score" data-best="tech"></span></button>
+    <button class="gcard" data-g="who"><h3>Who Said It?</h3><span>Match the line to the character.</span><span class="score" data-best="who"></span></button>
+    <button class="gcard" data-g="petal"><h3>PETAL Puzzle</h3><span>Put a scrambled model paragraph back in order.</span><span class="score" data-best="petal"></span></button>
+    <button class="gcard" data-g="upgrade"><h3>Upgrade Challenge</h3><span>Pick the rewrite that would score highest.</span><span class="score" data-best="upgrade"></span></button>
+  </div>
+  <div class="card stage" id="stage"></div>
+</section>
+
+<!-- PLANNER -->
+<section class="view" id="v-planner">
+  <div><h2>Essay Planner</h2><p class="lede">Put it all together: question, thesis, introduction, three body paragraphs and a conclusion. Your full essay builds at the bottom, ready to copy into a document.</p></div>
+  <div class="grid g2" style="align-items:start">
+    <div class="plan">
+      <div class="card plan">
+        <label for="pQ"><b>1. Essay question</b></label>
+        <select id="pQ"></select>
+        <textarea id="pQOwn" placeholder="Or paste your teacher's question here" rows="2" aria-label="Your own question"></textarea>
+      </div>
+      <div class="card plan">
+        <label for="pThesis"><b>2. Thesis</b></label>
+        <p class="hint">Pre-filled with the thesis you chose. Edit it so it answers your question directly.</p>
+        <textarea id="pThesis"></textarea>
+      </div>
+      <div class="card plan">
+        <label for="pIntro"><b>3. Introduction</b></label>
+        <p class="hint">Open with a sentence on human experience, then your thesis, then preview your three points. <button class="btn small ghost" id="pIntroDraft" type="button">Draft it for me from my thesis and paragraphs</button></p>
+        <textarea id="pIntro" style="min-height:140px"></textarea>
+      </div>
+      <div class="card plan">
+        <b>4. Body paragraphs</b>
+        <p class="hint">Choose from the paragraphs you saved in the PETAL Forge. Aim for one per theme.</p>
+        <label for="pB1">Body paragraph 1</label><select id="pB1"></select>
+        <label for="pB2">Body paragraph 2</label><select id="pB2"></select>
+        <label for="pB3">Body paragraph 3</label><select id="pB3"></select>
+      </div>
+      <div class="card plan">
+        <label for="pConc"><b>5. Conclusion</b></label>
+        <p class="hint">Restate your thesis in new words, sum up each point in a phrase, then end on what Away teaches us about being human.</p>
+        <div class="row" id="pConcStarters"></div>
+        <textarea id="pConc" style="min-height:120px"></textarea>
+      </div>
+    </div>
+    <div class="card" style="display:flex;flex-direction:column;gap:12px;position:sticky;top:64px">
+      <div class="spread"><h3>Your essay</h3><span class="count" id="pWords">0 words</span></div>
+      <div class="essay" id="pOut"></div>
+      <div class="row"><button class="btn" id="pCopy">Copy essay</button><button class="btn ghost" id="pDone">Mark plan complete</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- MODULE -->
+<section class="view" id="v-module">
+  <div><h2>Know the Module</h2><p class="lede">What the Common Module asks of you, the context you need for Away, and the PETAL scaffold explained.</p></div>
+  <div class="card" style="display:flex;flex-direction:column;gap:12px">
+    <h3>What markers look for in Texts and Human Experiences</h3>
+    <div class="grid g2" id="rubric"></div>
+  </div>
+  <div class="card" style="display:flex;flex-direction:column;gap:12px">
+    <h3>The PETAL scaffold</h3>
+    <table class="verbs"><tbody>
+      <tr><td>P</td><td><b>Point.</b> A topic sentence that makes one arguable claim and names the theme. Start with Gow, not with a character: "Gow reveals…", "Through ___, Gow suggests…"</td></tr>
+      <tr><td>E</td><td><b>Evidence.</b> A short, accurate quote embedded in your sentence, with who says it and when. "When Harry admits that 'we don't look back and we don't look forward', …"</td></tr>
+      <tr><td>T</td><td><b>Technique.</b> Name the technique precisely and describe what it does to the line. "The balanced parallelism…"</td></tr>
+      <tr><td>A</td><td><b>Analysis.</b> The most important part. Explain why Gow made this choice, what it reveals about human experience, and how context shapes it. Use strong verbs: reveals, exposes, illuminates, challenges, positions.</td></tr>
+      <tr><td>L</td><td><b>Link.</b> Connect back to the question and your thesis. "Thus, Gow suggests that…"</td></tr>
+    </tbody></table>
+  </div>
+  <div class="card" style="display:flex;flex-direction:column;gap:12px">
+    <h3>The ladder from C to A</h3>
+    <div class="ladder">
+      <div class="card"><h3>C · The Reteller</h3><p>Describes what happens. "Coral is sad because her son died." No quotes or techniques, and treats characters as real people.</p></div>
+      <div class="card"><h3>B · The Technician</h3><p>Finds quotes and names techniques, but the analysis stops at "this shows she is sad". Lists features without explaining their effect.</p></div>
+      <div class="card"><h3>A · The Analyst</h3><p>Treats the play as a construction by Gow. Fuses technique, context and form, and explains what the choice reveals about human experience.</p></div>
+    </div>
+  </div>
+  <div class="card" style="display:flex;flex-direction:column;gap:12px">
+    <h3>Context to weave into your analysis</h3>
+    <div class="grid g2" id="context"></div>
+  </div>
+</section>
+</main>
+<div class="toast" id="toast" role="status"></div>
+<script>
+/* Away — Common Module study site: content data
+   Theme keys: S = Universality of suffering, R = Complexity of human relationships, T = Transformation
+   Quotes checked against the Currency Press edition (1988). */
+
+const THEMES = {
+  S: { name: "The universality of suffering", short: "Suffering", symbol: "Storm" },
+  R: { name: "The complexity of human relationships", short: "Relationships", symbol: "Bonfire" },
+  T: { name: "Transformation", short: "Transformation", symbol: "Water" }
+};
+
+const TECHNIQUES = {
+  "Intertextuality": "Direct reference to another text (here A Midsummer Night's Dream, King Lear, Gone with the Wind) that layers extra meaning onto a moment.",
+  "Allusion": "A passing reference to a real person, event or cultural icon (Chips Rafferty, Kim Novak, the Armada) that brings its associations with it.",
+  "Metatheatre": "Theatre that draws attention to itself as theatre: a play-within-a-play, characters performing roles, actors addressing the audience.",
+  "Dramatic irony": "The audience knows something a character does not, so their words carry a second, sadder meaning.",
+  "Irony": "A gap between what is said and what is meant, or between what is expected and what happens.",
+  "Simile": "A comparison using 'like' or 'as' that shapes how we see the thing described.",
+  "Metaphor": "Describing one thing as another to reveal a hidden quality.",
+  "Symbolism": "An object, place or action that stands for a larger idea (the caravan, the lean-to, water, shells, slippers).",
+  "Repetition": "Repeated words or lines that build emphasis, obsession or ritual.",
+  "Anaphora": "Repetition of the same opening words across successive clauses, building rhythm and force.",
+  "Rhetorical question": "A question asked for effect rather than an answer; it exposes a character's feelings or challenges the listener.",
+  "Paradox": "A statement that seems to contradict itself but reveals a deeper truth.",
+  "Juxtaposition": "Placing contrasting ideas, scenes or characters side by side to highlight their differences.",
+  "Colloquialism": "Informal, everyday Australian speech that grounds characters in their class and era.",
+  "Idiom": "A fixed saying whose meaning is figurative ('still waters run deep', 'on the rocks').",
+  "Stage directions": "The playwright's instructions about action, sound and movement, which often speak louder than dialogue.",
+  "Listing": "A run of items that builds weight, scope or a sense of overwhelm.",
+  "Hyperbole": "Deliberate exaggeration for emphasis or comic effect.",
+  "Imagery": "Language that appeals to the senses to create a vivid picture.",
+  "Soliloquy": "A character speaking their private thoughts aloud, alone on stage.",
+  "Short sentences": "Clipped, simple sentences that convey restraint, shock or finality.",
+  "Imperative": "A command; reveals power, urgency or desperation.",
+  "Aposiopesis": "A sentence that breaks off unfinished (marked by a dash), showing emotion overwhelming speech.",
+  "Pathetic fallacy": "Nature reflecting human emotion; the storm externalises the characters' inner chaos.",
+  "Chorus": "A group speaking together, as in Greek drama, to represent collective social attitudes.",
+  "Parallelism": "Matching grammatical structures that create balance and rhythm and invite comparison.",
+  "Motif": "A recurring image or idea that gathers meaning across the play (dreams, walking, masks, shadows).",
+  "Tone": "The attitude conveyed by how something is said: bitter, sarcastic, tender, resigned.",
+  "Exclamation": "An emphatic outburst that reveals heightened emotion.",
+  "Tricolon": "A pattern of three parallel elements that gives a line weight and rhythm."
+};
+
+const QUOTES = [
+  // ACT ONE
+  { id: 1, q: "If we shadows have offended, / Think but this, and all is mended", who: "Tom (as Puck)", where: "Act 1, Scene 1", tech: ["Intertextuality", "Metatheatre", "Dramatic irony"], themes: ["T", "S"],
+    a: "Gow opens with Puck's epilogue, so the play begins with an ending. 'Shadows' quietly foreshadows Tom's mortality, while 'mended' promises the restoration the families will eventually find. The audience is told from the first line that this is a fable of healing." },
+  { id: 2, q: "Give me your hands, if we be friends, / And Robin shall restore amends.", who: "Tom (as Puck)", where: "Act 1, Scene 1", tech: ["Intertextuality", "Imperative", "Symbolism"], themes: ["T", "R"],
+    a: "The imperative 'give me your hands' casts Tom as the Puck-like agent who will reconcile the families. Restoration depends on physical connection, an idea the final non-verbal reconciliations fulfil." },
+  { id: 3, q: "What a lot of little Chips Raffertys we've got here in our own school.", who: "Roy", where: "Act 1, Scene 1", tech: ["Allusion", "Colloquialism", "Tone"], themes: ["R", "S"],
+    a: "Roy's allusion to the Australian film icon performs a jovial, patriotic authority. Knowing he is grieving a son lost in Vietnam, the audience hears the brittleness of a man maintaining public composure." },
+  { id: 4, q: "Still waters run deep. My father's always saying that.\" / \"Still waters stink.", who: "Meg / Tom", where: "Act 1, Scene 2", tech: ["Idiom", "Irony", "Motif"], themes: ["R", "T"],
+    a: "Tom subverts Jim's comfortable idiom, rejecting the repression of the parents' generation. Still water stagnates; the play's healing water must move, so the line foreshadows the cleansing surf of Act Four." },
+  { id: 5, q: "I could've throttled them. Little beggars.", who: "Gwen", where: "Act 1, Scene 2", tech: ["Hyperbole", "Colloquialism", "Tone"], themes: ["R"],
+    a: "Gwen's comic hyperbole introduces her as the nagging snob, but her aggression toward children at a school play signals an anxiety out of proportion to the situation." },
+  { id: 6, q: "No. No. No. No. No. No. No. I haven't come across any keys yet.", who: "Gwen", where: "Act 1, Scene 2", tech: ["Repetition", "Stage directions"], themes: ["S", "R"],
+    a: "As she tips her handbag on the floor, the relentless repetition of 'No' exposes a woman whose fear of losing control is triggered by something as small as misplaced keys." },
+  { id: 7, q: "A lean-to?\" / \"That's it.\" / \"Ohhhhh.", who: "Gwen / Harry", where: "Act 1, Scene 2", tech: ["Symbolism", "Tone", "Juxtaposition"], themes: ["R"],
+    a: "The drawn-out 'Ohhhhh' carries Gwen's condescension. The humble lean-to is juxtaposed with her 'new caravan' and Roy's Gold Coast flight, mapping the class hierarchy the storm will later flatten." },
+  { id: 8, q: "They shouldn't be going on a holiday if they can't afford one.", who: "Gwen", where: "Act 1, Scene 2", tech: ["Tone", "Dramatic irony"], themes: ["R", "S"],
+    a: "Gwen measures worth by money. The audience later learns this holiday may be Tom's last, so her judgement is cruelly ironic." },
+  { id: 9, q: "I hope you have a rotten holiday. I hope it rains.", who: "Tom", where: "Act 1, Scene 2", tech: ["Anaphora", "Dramatic irony", "Hyperbole"], themes: ["T", "R"],
+    a: "Tom's anaphoric curse works like a Puck spell: the storm he wishes on Gwen arrives in Act Three. Gow hints that the destruction is a necessary, almost magical, punishment of prejudice." },
+  { id: 10, q: "No-one asked them to come out to this country.", who: "Gwen", where: "Act 1, Scene 2", tech: ["Tone", "Allusion"], themes: ["R"],
+    a: "Gwen voices the suspicion some Australians felt toward post-war British migrants. Her xenophobia reflects a society anxious about change and status." },
+  { id: 11, q: "Some people may be happy living like pigs but I'm not.", who: "Gwen", where: "Act 1, Scene 2", tech: ["Simile", "Tone"], themes: ["S", "R"],
+    a: "The dehumanising animal simile reveals that Gwen's snobbery is a defence: she despises poverty because she has lived it and fears returning to it." },
+  { id: 12, q: "In that blue light the shadows on his face and neck were like bruises.", who: "Coral", where: "Act 1, Scene 3", tech: ["Simile", "Imagery", "Dramatic irony"], themes: ["S"],
+    a: "Coral's simile unknowingly diagnoses Tom's leukaemia, since bruising is a symptom Harry later says they watch for. Her grief gives her a painful clarity: she sees death behind youth's vitality." },
+  { id: 13, q: "'What angel wakes me from my flowery bed?' I kept saying it over and over in the dark.", who: "Coral", where: "Act 1, Scene 3", tech: ["Intertextuality", "Soliloquy", "Repetition"], themes: ["S", "T"],
+    a: "Coral borrows Titania's line from A Midsummer Night's Dream. Like the enchanted queen, she prefers the oblivion of the 'flowery bed' to waking into a reality where her son is dead." },
+  { id: 14, q: "Is it better for them to die like that? Looking like gods?", who: "Coral", where: "Act 1, Scene 3", tech: ["Rhetorical question", "Imagery"], themes: ["S"],
+    a: "The rhetorical questions reveal Coral's obsession with young death. The image of gilded children 'like gods' merges the school fairies with the young conscripts sent to Vietnam." },
+  { id: 15, q: "Alas?\" ... \"Alas.", who: "Coral", where: "Act 1, Scene 3", tech: ["Intertextuality", "Tone", "Short sentences"], themes: ["S"],
+    a: "Coral reaches for theatrical language because ordinary words fail her grief. The single archaic word, first questioned then sighed, ends her soliloquy in resignation." },
+
+  // ACT TWO
+  { id: 16, q: "That day in the hospital and you brought in the tent and put it up in the ward.", who: "Tom", where: "Act 2, Scene 1", tech: ["Symbolism", "Imagery"], themes: ["R", "S"],
+    a: "The tent pitched in a hospital ward becomes a symbol of the family's love: hope and togetherness set up inside the space of illness. It also gives the humble lean-to Gwen mocks a deeper value." },
+  { id: 17, q: "Even if it is slow, if you could try and still have a good time, look like you're having a good time.", who: "Harry", where: "Act 2, Scene 1", tech: ["Dramatic irony", "Motif", "Repetition"], themes: ["R", "S"],
+    a: "Harry asks Tom to perform happiness 'for your mother', and Vic soon asks the same 'for your dad'. Gow uses this mirrored request to reveal a family who protect each other through loving pretence." },
+  { id: 18, q: "Do you think holidays happen by themselves?", who: "Gwen", where: "Act 2, Scene 2", tech: ["Rhetorical question", "Tone"], themes: ["R"],
+    a: "Gwen's sarcastic rhetorical question turns leisure into labour. For her, the holiday is a duty to be controlled rather than a chance to rest." },
+  { id: 19, q: "When you're married to someone, do you ever wish they were dead?", who: "Meg", where: "Act 2, Scene 2", tech: ["Rhetorical question", "Tone"], themes: ["R"],
+    a: "Meg's blunt question exposes the hidden tensions in her parents' marriage and her own frustration. Gow uses the shock of it to show a teenager naming what the adults will not." },
+  { id: 20, q: "We lived in rubbish tips. We shared rooms with other people.", who: "Jim", where: "Act 2, Scene 2", tech: ["Short sentences", "Imagery"], themes: ["S", "R"],
+    a: "Jim's plain sentences recall the collective trauma of the Depression. Gwen's control is recontextualised as the product of shared historical suffering." },
+  { id: 21, q: "We stuck to our plans like the Bible.", who: "Jim", where: "Act 2, Scene 2", tech: ["Simile"], themes: ["S", "R"],
+    a: "The religious simile shows that Gwen's plans became a kind of faith, a protection against the chaos of poverty. Jim's loyalty is also his surrender." },
+  { id: 22, q: "I don't think anyone should give in for the sake of peace and quiet. I won't.", who: "Meg", where: "Act 2, Scene 2", tech: ["Short sentences", "Tone"], themes: ["R", "T"],
+    a: "Meg's declarative 'I won't' marks the generational shift of the late 1960s. She rejects her father's passivity, foreshadowing her role in steering the family to the beach." },
+  { id: 23, q: "I can't go on turning up at school functions with you if you're going to behave like a ghost.", who: "Roy", where: "Act 2, Scene 3", tech: ["Simile", "Tone"], themes: ["S", "R"],
+    a: "Roy's simile shows Coral as half-alive, haunting the world of the living. That his concern is his 'position at school' reveals how social appearance has displaced compassion in their marriage." },
+  { id: 24, q: "I miss the boy too. I feel it. I suffer for it.", who: "Roy", where: "Act 2, Scene 3", tech: ["Short sentences", "Repetition"], themes: ["S", "R"],
+    a: "Beneath Roy's rigid authority lies his own grief. The clipped sentences capture a man who cannot express emotion fluently, revealing that the couple suffer the same loss in isolation from each other." },
+  { id: 25, q: "It's everywhere, isn't it? In the air we breathe.", who: "Coral", where: "Act 2, Scene 3", tech: ["Metaphor", "Rhetorical question"], themes: ["S"],
+    a: "Coral's metaphor makes grief atmospheric and inescapable, as pervasive as breathing. Suffering here is a condition of existence rather than an event." },
+  { id: 26, q: "We are not the first people in the history of the world to lose a son in war.", who: "Roy", where: "Act 2, Scene 3", tech: ["Hyperbole", "Allusion", "Tone"], themes: ["S"],
+    a: "Roy appeals to the universality of suffering to demand that Coral 'go on'. Gow lets the audience see the truth in his words alongside their coldness: shared suffering does not make individual grief smaller." },
+  { id: 27, q: "Would you rather not pay the price for the life we have?", who: "Roy", where: "Act 2, Scene 3", tech: ["Rhetorical question", "Metaphor"], themes: ["S"],
+    a: "The economic metaphor of a 'price' reduces a son's death to a transaction for Australia's 'standard of living'. Gow critiques Cold War justifications for Vietnam through Roy's defensive logic." },
+  { id: 28, q: "We won't mention helicopters, or jungles, or mines—", who: "Coral", where: "Act 2, Scene 3", tech: ["Listing", "Aposiopesis", "Imagery"], themes: ["S"],
+    a: "In promising not to mention the war, Coral lists its images anyway. The broken-off dash shows trauma intruding on her attempt at normality." },
+  { id: 29, q: "But if you could just pretend a bit... if you have to. For your dad.", who: "Vic", where: "Act 2, Scene 4", tech: ["Parallelism", "Dramatic irony"], themes: ["R"],
+    a: "Vic's request mirrors Harry's almost word for word. The parallel scenes reveal a family bound by love yet each performing for the others: a tender, painful complexity." },
+
+  // ACT THREE
+  { id: 30, q: "There is a price that has to be paid, of course. And we should all be prepared to pay it.", who: "Coral", where: "Act 3, Scene 1", tech: ["Irony", "Repetition", "Tone"], themes: ["S"],
+    a: "Coral parrots Roy's justification in the luxury hotel. When she repeats it to Rick, the stage direction notes she is '[running out of conviction]', exposing how hollow the official story of sacrifice is." },
+  { id: 31, q: "If there were someone here who was in trouble would anyone know, would anyone take the trouble to find out, to try and help?", who: "Coral", where: "Act 3, Scene 1", tech: ["Rhetorical question", "Repetition"], themes: ["S", "R"],
+    a: "Coral's question exposes the isolation hidden beneath the hotel's glamour. Leonie's breakdown proves her right: suffering is everywhere, but no one is looking." },
+  { id: 32, q: "There's a couple who are both very ill and not telling each other. Cancer, I think. Quite a few marriages on the rocks.", who: "Coral", where: "Act 3, Scene 1", tech: ["Listing", "Idiom", "Tone"], themes: ["S"],
+    a: "Coral's detached catalogue of private despair reveals the universality of suffering behind wealth. The 'couple... not telling each other' foreshadows the secret kept within Tom's family." },
+  { id: 33, q: "I missed out being a nasho by one number. It's like a lottery, you see.", who: "Rick", where: "Act 3, Scene 1", tech: ["Simile", "Colloquialism", "Allusion"], themes: ["S"],
+    a: "The simile turns a symbol of luck into a symbol of arbitrary death. The colloquial 'nasho' grounds the play in the conscription ballot of 1964 to 1972, the random system that took Coral's son." },
+  { id: 34, q: "You're still alive. You're still alive and talking and laughing.", who: "Coral", where: "Act 3, Scene 3", tech: ["Repetition", "Short sentences"], themes: ["S", "R"],
+    a: "Coral's repetition reveals that Rick is a surrogate for her dead son. Her attraction is to his aliveness, showing grief distorting her relationships." },
+  { id: 35, q: "I feel like I'm asleep all the time.\" ... \"Like in a dream.", who: "Rick", where: "Act 3, Scene 3", tech: ["Simile", "Motif", "Intertextuality"], themes: ["T", "S"],
+    a: "Rick's simile links to the dream motif of A Midsummer Night's Dream. He drifts through a life chosen by convention; to be asleep is to be untransformed." },
+  { id: 36, q: "Do you want me to arrange shock treatment? I can. I looked into it.", who: "Roy", where: "Act 3, Scene 3", tech: ["Rhetorical question", "Short sentences", "Tone"], themes: ["S", "R"],
+    a: "Roy's threat reveals the 1960s impulse to manage grief by force. His clipped, bureaucratic sentences show a man whose helplessness has turned to control." },
+  { id: 37, q: "We'll make it a better year. No looking back.", who: "Roy", where: "Act 3, Scene 3", tech: ["Juxtaposition", "Tone"], themes: ["R", "T"],
+    a: "Roy's New Year resolution is denial: he wants to erase the past. Gow juxtaposes it with Harry's acceptance in Act Four, 'We don't look back and we don't look forward'." },
+  { id: 38, q: "Sacrificed! Gone without. Gone through hardship so what happened to us will never happen to you.", who: "Gwen", where: "Act 3, Scene 2", tech: ["Exclamation", "Repetition", "Short sentences"], themes: ["S", "R"],
+    a: "Gwen's outburst exposes the root of her control: Depression-era poverty. The repetition of 'never' later in the speech shows fear rather than cruelty driving her behaviour." },
+  { id: 39, q: "'As God is my witness, I will never be hungry again'.", who: "Jim (recalling Gwen)", where: "Act 3, Scene 2", tech: ["Intertextuality", "Allusion"], themes: ["S", "T"],
+    a: "Jim recalls young Gwen rehearsing Scarlett O'Hara's vow from Gone with the Wind. The intertext reveals her ambition as a survivor's oath and makes her sympathetic." },
+  { id: 40, q: "And some of the New Australian campers might need to be reminded of the way proper Australian families run a holiday.", who: "First Camper", where: "Act 3, Scene 2", tech: ["Chorus", "Irony", "Tone"], themes: ["R"],
+    a: "The campers' chorus satirises suburban conformity and prejudice. Jim tearing up their list is a quiet act of resistance." },
+  { id: 41, q: "The FAIRIES return and stage a spectacular storm, emptying the stage to the sound of Mendelssohn's 'Wedding March'.", who: "Stage direction", where: "Act 3, Scene 4", tech: ["Pathetic fallacy", "Metatheatre", "Symbolism"], themes: ["T", "S"],
+    a: "The school fairies return as agents of chaos. The ironic 'Wedding March' suggests the storm is a union as well as a destruction: it will bring the families together." },
+  { id: 42, q: "We were lucky to miss that storm.", who: "Vic", where: "Act 3, Scene 5", tech: ["Dramatic irony", "Juxtaposition"], themes: ["S"],
+    a: "Placed directly after the storm, Vic's line is heavy with irony. Her family escaped the weather but cannot escape the larger storm of Tom's illness." },
+
+  // ACT FOUR
+  { id: 43, q: "your van's a wreck, your boat's smashed on the rocks and all your clothes are soaked.", who: "Jim", where: "Act 4, Scene 1", tech: ["Listing", "Symbolism"], themes: ["T", "S"],
+    a: "Jim's list records the destruction of the family's status symbols. Stripped of the caravan, Gwen's armour is gone and transformation becomes possible." },
+  { id: 44, q: "there are just three lines of footprints trailing away into the distance.", who: "Vic", where: "Act 4, Scene 1", tech: ["Imagery", "Symbolism"], themes: ["R", "S"],
+    a: "The image captures the family's intimacy on the empty beach. Footprints are temporary, so the line quietly anticipates a time when there will be only two." },
+  { id: 45, q: "A man with a spear. And a big kangaroo.\" ... \"Five thousand years. At least.", who: "Harry / Vic", where: "Act 4, Scene 1", tech: ["Imagery", "Juxtaposition"], themes: ["S", "T"],
+    a: "The ancient Aboriginal rock carving sets the families' troubles against deep time. Individual suffering is placed within a far older human story." },
+  { id: 46, q: "The world is full of mad people. Everywhere, mad people.", who: "Gwen", where: "Act 4, Scene 1", tech: ["Repetition", "Hyperbole", "Exclamation"], themes: ["S", "T"],
+    a: "Gwen's outburst, which collapses into dehumanising images of 'ants, swarming', is her breaking point. The stage direction 'She stifles herself' shows the armour cracking." },
+  { id: 47, q: "In a funny kind of way we're happy. Even while we're very, very sad.", who: "Harry", where: "Act 4, Scene 1", tech: ["Paradox", "Repetition"], themes: ["S", "R"],
+    a: "Harry's paradox is the emotional heart of the play. Joy and grief coexist, an insight into the contradictions of human experience that the Common Module rubric invites you to explore." },
+  { id: 48, q: "We don't look back and we don't look forward. We have this boy and we won't have him for long. And whatever he does, that will have to be enough.", who: "Harry", where: "Act 4, Scene 1", tech: ["Parallelism", "Short sentences", "Juxtaposition"], themes: ["S", "R", "T"],
+    a: "The balanced parallelism captures stoic acceptance: living fully in the present. Gow juxtaposes it with Roy's 'No looking back' and Gwen's obsessive future plans." },
+  { id: 49, q: "He must not be afraid. He must never suspect. He must look ahead even if we never do.", who: "Harry", where: "Act 4, Scene 1", tech: ["Anaphora", "Dramatic irony"], themes: ["R"],
+    a: "The anaphoric 'He must' shows the fierce protectiveness of parental love. The audience knows Tom already knows, so the secret is a mutual, loving deception." },
+  { id: 50, q: "The women come back. They have been crying and are supporting each other.", who: "Stage direction", where: "Act 4, Scene 1", tech: ["Stage directions", "Symbolism"], themes: ["R", "T"],
+    a: "Off-stage, by the water, Vic has shared the truth. The image of the two mothers holding each other shows suffering dissolving class barriers." },
+  { id: 51, q: "Don't protect me. Tell me what I'm feeling.", who: "Gwen", where: "Act 4, Scene 1", tech: ["Imperative", "Short sentences"], themes: ["T", "R"],
+    a: "Gwen's imperatives reverse her usual control: she now asks to be exposed. It is the first moment she seeks honesty over protection." },
+  { id: 52, q: "I can't take this powder. I can't make it go in.", who: "Gwen", where: "Act 4, Scene 1", tech: ["Symbolism", "Repetition"], themes: ["T"],
+    a: "The Bex powder has symbolised Gwen's habit of numbing her anxiety. Her body's refusal to take it signals that she can no longer avoid her feelings." },
+  { id: 53, q: "Let's walk. Come on, down to the water. The water's so warm.", who: "Gwen", where: "Act 4, Scene 1", tech: ["Symbolism", "Imperative"], themes: ["T", "R"],
+    a: "Gwen chooses to walk to the water with Jim. The warm water symbolises cleansing and rebirth, and the 'walk' anticipates Coral's 'I'm walking'." },
+  { id: 54, q: "I wanted us to take a chance for once and see what was here.", who: "Meg", where: "Act 4, Scene 2", tech: ["Tone"], themes: ["T", "R"],
+    a: "Meg's insistence on turning off the highway shows the younger generation steering the old toward healing." },
+  { id: 55, q: "I'm going to get sick again. And I won't get better.", who: "Tom", where: "Act 4, Scene 2", tech: ["Short sentences", "Tone"], themes: ["S"],
+    a: "Stripped of jokes for once, Tom states his fate in plain declaratives. The bluntness forces the audience to share the full weight of his secret." },
+  { id: 56, q: "They mustn't find out I know. They mustn't even suspect, the poor bastards.", who: "Tom", where: "Act 4, Scene 2", tech: ["Parallelism", "Dramatic irony", "Colloquialism"], themes: ["R"],
+    a: "Tom echoes Harry's 'He must never suspect', and only the audience hears both. The colloquial 'poor bastards' is tender rather than crude: the son protects the parents protecting him." },
+  { id: 57, q: "He lies on his back and covers his face with his hands, lies there for a moment.", who: "Stage direction", where: "Act 4, Scene 2", tech: ["Stage directions"], themes: ["S"],
+    a: "After his performance of push-ups and laughter, this private gesture reveals the fear Tom hides from everyone. Gow lets silence speak where Tom will not." },
+  { id: 58, q: "'Alas, alas, I have no legs'", who: "Coral (as the mermaid)", where: "Act 4, Scene 3", tech: ["Metatheatre", "Metaphor", "Repetition"], themes: ["S", "T"],
+    a: "Coral's mermaid, unable to walk, is a metaphor for her own paralysis in grief. The comic register of the playlet allows her to voice pain safely." },
+  { id: 59, q: "'Better I am unhappy for all eternity than she suffer another moment.'", who: "Tom (as the sailor)", where: "Act 4, Scene 3", tech: ["Metatheatre", "Dramatic irony", "Hyperbole"], themes: ["R", "T"],
+    a: "The ghostly sailor sacrifices his wish so his love can live. Through the role, the dying Tom gives Coral permission to return to life, and gives the audience his own story in miniature." },
+  { id: 60, q: "'I cannot walk. I am afraid.'\" / \"'I will show you how.'", who: "Coral / Tom", where: "Act 4, Scene 3", tech: ["Metatheatre", "Short sentences", "Symbolism"], themes: ["T", "R"],
+    a: "The simple exchange makes healing an act of companionship. The stage direction has Tom lift her 'as she takes a step forward, then another, then another'." },
+  { id: 61, q: "'I'm walking, I'm walking.' [In her own voice] I'm walking, I'm walking, I'm walking.", who: "Coral", where: "Act 4, Scene 3", tech: ["Repetition", "Metatheatre", "Stage directions"], themes: ["T"],
+    a: "The shift from role to 'her own voice' collapses fiction into reality. Through art, Coral rehearses her return to the living world." },
+  { id: 62, q: "They've lit a bonfire on the beach. Look! It's like when the Armada was coming.", who: "Vic", where: "Act 4, Scene 3", tech: ["Simile", "Allusion", "Symbolism"], themes: ["T", "S"],
+    a: "Vic, the English migrant, alludes to the beacon fires lit across England in 1588. The fire is both warning and celebration: destruction and purification. Watch out: some study guides give this line to Coral, but in the play it is Vic's." },
+  { id: 63, q: "The applause is led thunderously by GWEN.", who: "Stage direction", where: "Act 4, Scene 3", tech: ["Stage directions", "Irony"], themes: ["T"],
+    a: "The woman who complained 'All that talking!' about Shakespeare now leads the applause for art. The stage direction marks Gwen's transformation." },
+
+  // ACT FIVE
+  { id: 64, q: "It is a pair of slippers. She looks at them, then at him, and walks away, a bit overcome.", who: "Stage direction", where: "Act 5, Scene 1", tech: ["Symbolism", "Stage directions"], themes: ["R", "T"],
+    a: "The forgotten present, once the source of the Christmas fight, becomes a token of reconciliation. Gow resolves the conflict through gesture, not words." },
+  { id: 65, q: "ROY leans towards them and buries his face in the shells in CORAL's hands.", who: "Stage direction", where: "Act 5, Scene 1", tech: ["Symbolism", "Stage directions"], themes: ["R", "T"],
+    a: "The shells, gifts from the beach, carry the healing of the natural world back to Roy. Their wordless reconciliation shows that the deepest connections transcend language." },
+  { id: 66, q: "the struggle between man and nature, as well as between man and man, and between man and himself", who: "Miss Latrobe", where: "Act 5, Scene 2", tech: ["Tricolon", "Metatheatre", "Intertextuality"], themes: ["S", "T"],
+    a: "Miss Latrobe's tricolon describes King Lear and doubles as a summary of Away. The holiday has dramatised all three struggles." },
+  { id: 67, q: "To shake all cares and business from our age, / Conferring them on younger strengths, while we / Unburden'd crawl toward death.", who: "Tom (reading King Lear)", where: "Act 5, Scene 2", tech: ["Intertextuality", "Dramatic irony", "Paradox"], themes: ["S", "T"],
+    a: "The play ends with the dying boy reading an old king's words about death. The dramatic irony is devastating, yet 'unburden'd' suggests acceptance: the comic restoration of the Dream gives way to tragic insight." },
+  { id: 68, q: "Beyond them, as in a dream, the lights play on the blue horizon and the sea.", who: "Stage direction", where: "Act 5, Scene 2", tech: ["Stage directions", "Motif", "Imagery"], themes: ["T"],
+    a: "The final image returns to the dream motif and the sea. The holiday is over, but the restorative vision remains with the characters and the audience." }
+];
+
+const OVERALL_THESES = [
+  "In Away, Gow suggests that suffering is a universal and inescapable human experience, yet it is through the vulnerability of genuine relationships that individuals are transformed from isolation to acceptance.",
+  "Gow's Away reveals that the masks individuals construct to conceal pain only deepen their suffering and fracture their relationships; transformation becomes possible only when these facades are stripped away by forces beyond human control.",
+  "Through the Shakespearean arc from A Midsummer Night's Dream to King Lear, Gow elevates the private grief of three 1960s Australian families into a universal fable, suggesting that suffering, while unavoidable, can become the catalyst for reconciliation and renewed understanding.",
+  "Away illuminates the paradox that suffering both isolates and unites: while grief and fear first drive Gow's characters into self-protective isolation, shared vulnerability ultimately reconnects them and transforms their understanding of what it means to live well.",
+  "Gow positions the holiday as a journey away from social pretence and toward self-knowledge, revealing that the complexity of human relationships lies in the tension between protecting those we love and being honest with them.",
+  "Gow's Away suggests that human beings cannot control suffering, but they can choose how they respond to it; through nature, art and compassion, his characters learn to accept loss and are transformed by that acceptance.",
+  "In Away, Gow exposes the inconsistencies of a 1960s Australian society that equates worth with material comfort, showing that genuine transformation comes from the shared recognition of universal human suffering rather than from status."
+];
+
+const THEME_BANK = {
+  S: {
+    theses: [
+      "Gow represents suffering as a universal condition that crosses the boundaries of class, age and nationality, suggesting that no social status or material wealth can shield individuals from loss.",
+      "Through the contrasting griefs of Coral, Gwen and Tom's parents, Gow reveals that suffering is both deeply individual and inescapably collective, shaped by the historical traumas of war, Depression and illness.",
+      "Away suggests that suppressing suffering only prolongs it, as Gow's characters must confront rather than conceal their pain in order to heal."
+    ],
+    topics: [
+      { t: "Gow establishes the universality of suffering by revealing that every social class in the play is touched by loss, from the affluent headmaster to the migrant factory workers.", quotes: [32, 31, 7] },
+      { t: "Through Coral's fractured soliloquy and Shakespearean allusion, Gow captures how grief for a son lost in Vietnam can isolate an individual from the world of the living.", quotes: [13, 14, 25] },
+      { t: "Gow exposes how the collective trauma of the Depression continues to shape suffering across generations, as Gwen's fear of poverty shows itself as control and hostility.", quotes: [38, 20, 11] },
+      { t: "Gow uses dramatic irony surrounding Tom's illness to show that suffering is often borne in silence, as each family member conceals pain to protect the others.", quotes: [55, 49, 12] },
+      { t: "By framing the play with Puck's epilogue and Lear's 'crawl toward death', Gow places individual suffering within a universal human cycle of mortality.", quotes: [1, 67, 45] },
+      { t: "Gow uses the luxury hotel and the official language of sacrifice to show how 1960s Australian society masked suffering beneath a performance of prosperity.", quotes: [30, 27, 33] }
+    ]
+  },
+  R: {
+    theses: [
+      "Gow reveals that human relationships are complicated by the competing desires to protect and to be honest, and that true connection is achieved only through vulnerability.",
+      "Away exposes how fear, class prejudice and grief fracture families, while suggesting that compassion across social boundaries can restore them.",
+      "Through generational conflict and unlikely friendships, Gow demonstrates that human relationships are shaped as much by what is left unsaid as by what is spoken."
+    ],
+    topics: [
+      { t: "Gow explores the paradox of protective love through Harry, Vic and Tom, who each conceal the truth of Tom's illness to shield the others from pain.", quotes: [17, 29, 56] },
+      { t: "Through Gwen's controlling behaviour and Meg's defiance, Gow captures the tension between generations in a society on the brink of change.", quotes: [18, 22, 19] },
+      { t: "Gow reveals how grief can estrange even the closest relationships, as Roy's demands for 'normal' behaviour isolate Coral further.", quotes: [23, 24, 36] },
+      { t: "Gow uses the unlikely bond between Gwen and Vic to show that shared vulnerability can dissolve the barriers of class and prejudice.", quotes: [50, 7, 10] },
+      { t: "Through Tom's role as a Puck-like catalyst who moves between all three families, Gow suggests that connection across difference is the foundation of healing.", quotes: [2, 60, 59] },
+      { t: "Gow uses the non-verbal stage imagery of the final reconciliations to suggest that the deepest human connections transcend language.", quotes: [64, 65, 44] }
+    ]
+  },
+  T: {
+    theses: [
+      "Gow suggests that genuine transformation requires individuals to be stripped of their defences, as the destructive storm and the restorative beach move his characters from denial to acceptance.",
+      "In Away, transformation emerges through art, nature and confrontation with mortality, as Gow's characters journey from the artificial world of status to the honest world of the natural landscape.",
+      "Gow structures Away as a journey from blindness to insight, suggesting that transformation is painful but necessary if individuals are to live authentically."
+    ],
+    topics: [
+      { t: "Gow uses the storm as a catalyst for transformation, its destruction of Gwen's material comforts forcing her to confront the fear beneath her snobbery.", quotes: [41, 43, 46] },
+      { t: "Through the metatheatrical playlet 'The Stranger on the Shore', Gow demonstrates the power of storytelling to transform Coral's grief into acceptance.", quotes: [61, 58, 60] },
+      { t: "Gow presents the beach as a liminal space where social hierarchies dissolve, allowing characters to shed the facades of suburban life.", quotes: [53, 52, 50] },
+      { t: "Gow charts Meg's growth from obedient daughter to assertive young woman, reflecting the generational shift of late-1960s Australia.", quotes: [22, 54, 4] },
+      { t: "By moving from A Midsummer Night's Dream to King Lear, Gow structures the play as a shift from comic illusion to tragic acceptance, mirroring the characters' journey toward self-knowledge.", quotes: [1, 67, 35] },
+      { t: "Gow uses symbolic objects such as the slippers, the shells and the bonfire to show that transformation is expressed through renewed connection rather than grand declarations.", quotes: [64, 65, 62] }
+    ]
+  }
+};
+
+const QUESTIONS = [
+  "How does Away explore the anomalies and paradoxes of human behaviour? In your response, refer to the universality of suffering.",
+  "'Human experiences are shaped by our relationships with others.' To what extent does Away support this view?",
+  "To what extent does Gow suggest that suffering can be a catalyst for transformation in Away?",
+  "How does Gow use storytelling to illuminate individual and collective human experiences in Away?",
+  "'Texts invite us to see the world differently.' How does Away challenge assumptions about grief, class and family?",
+  "Analyse how Gow represents the human need for connection in a world shaped by loss."
+];
+
+/* Model PETAL paragraphs: each sentence tagged with its PETAL role */
+const MODEL_PARAS = [
+  { theme: "S", parts: [
+    ["P", "Gow establishes the universality of suffering by revealing that grief is not confined to one class or family, but runs through every level of 1960s Australian society."],
+    ["E", "At the Gold Coast hotel, Coral catalogues the hidden pain of the wealthy guests: a couple 'both very ill and not telling each other' and 'quite a few marriages on the rocks'."],
+    ["T", "Her detached listing, sharpened by the colloquial idiom 'on the rocks', exposes the gap between the hotel's glittering surface and the private despair it conceals."],
+    ["A", "Ironically, the guests who have paid for luxury are no more protected than Harry and Vic in their humble lean-to, and only Coral, herself grieving a son lost in Vietnam, can see it. Gow thereby challenges the post-war assumption that prosperity guarantees happiness, positioning the audience to recognise suffering as a shared human condition."],
+    ["L", "In this way, Gow suggests that the universality of suffering is precisely what binds individuals together, even when they try to hide it."]
+  ]},
+  { theme: "R", parts: [
+    ["P", "Gow explores the paradox of protective love through Tom and his parents, who each conceal the truth of his illness to shield the others from pain."],
+    ["E", "Harry makes Jim promise that Tom 'must never suspect', while Tom later tells Meg that his parents 'mustn't even suspect, the poor bastards'."],
+    ["T", "Gow's dramatic irony and parallel phrasing across the two scenes ensure that only the audience grasps that father and son perform the same act of loving deception."],
+    ["A", "The secret, intended as a gift, isolates each character in private grief, yet it also reveals the depth of their devotion; Tom's colloquial 'poor bastards' is tender rather than crude. Gow captures the complexity of human relationships, where honesty and protection pull in opposite directions."],
+    ["L", "Ultimately, Gow suggests that love is defined not by the absence of suffering but by the willingness to carry it for another."]
+  ]},
+  { theme: "T", parts: [
+    ["P", "Through the metatheatrical playlet 'The Stranger on the Shore', Gow demonstrates the power of storytelling to transform Coral's grief into acceptance."],
+    ["E", "As the mermaid who learns to walk again, Coral repeats 'I'm walking, I'm walking', and the stage direction notes that she continues '[In her own voice]'."],
+    ["T", "The repetition, together with this shift from performed role to authentic voice, blurs the boundary between fiction and reality."],
+    ["A", "Coral, who had earlier retreated into the 'flowery bed' of Titania's dream, uses art to rehearse her return to the living world, while Tom, the dying 'honest Puck', gives her the strength he cannot keep for himself. The play-within-a-play becomes a ritual of healing that Roy's threatened 'shock treatment' never could."],
+    ["L", "Gow therefore positions transformation as painful but liberating, achieved when individuals find the courage to walk forward despite loss."]
+  ]}
+];
+
+/* Upgrade challenge: pick the strongest rewrite */
+const UPGRADES = [
+  { weak: "Coral is sad because her son died in the war.",
+    options: [
+      { t: "Coral is very, very sad about her son who died in Vietnam, which is a war.", s: 0, why: "Still retelling. No technique, no evidence, no effect." },
+      { t: "Gow uses a soliloquy where Coral quotes Shakespeare to show she is sad.", s: 1, why: "Names a technique, but 'to show she is sad' doesn't explain how or why. This is B-range 'technique spotting'." },
+      { t: "Through Coral's soliloquy, in which she echoes Titania's 'What angel wakes me from my flowery bed?', Gow reveals a grief so consuming that she would rather remain in dreamlike oblivion than wake to a world without her son.", s: 2, why: "Technique, evidence and effect are fused into one analytical sentence that explains why the intertext matters." }
+    ]},
+  { weak: "The storm wrecks Gwen's caravan and that changes her.",
+    options: [
+      { t: "Gow employs the storm as a form of pathetic fallacy, externalising Gwen's inner turmoil and stripping away the caravan, the material armour that protected her from her fear of poverty.", s: 2, why: "Names the technique, explains its effect and links it to Gwen's psychology." },
+      { t: "There is a big storm in Act 3 Scene 4 and Gwen loses her stuff.", s: 0, why: "Plot summary with a scene reference. Nothing is analysed." },
+      { t: "The storm is symbolism because it destroys things and Gwen is upset.", s: 1, why: "Labels a technique but misses what the storm symbolises." }
+    ]},
+  { weak: "Harry says they're happy and sad.",
+    options: [
+      { t: "Harry uses a paradox when he says they are happy and sad, which shows his feelings.", s: 1, why: "Correct technique, but 'shows his feelings' is vague." },
+      { t: "Harry's paradox, 'In a funny kind of way we're happy. Even while we're very, very sad', captures the contradictory nature of grief, suggesting that love for Tom allows joy to coexist with impending loss.", s: 2, why: "Precise quote, named technique and an insight into the paradoxes of human experience the rubric asks for." },
+      { t: "Harry is a nice dad who loves his son Tom who is sick.", s: 0, why: "Character description, not analysis." }
+    ]},
+  { weak: "Gwen is a snob to Harry and Vic.",
+    options: [
+      { t: "Gwen is rude to Harry and Vic because they have a tent and she has a caravan.", s: 0, why: "Accurate plot, but no analysis." },
+      { t: "Gow's dehumanising animal simile, as Gwen sneers that 'some people may be happy living like pigs', reveals that her snobbery is a defence against her own fear of the Depression-era poverty she escaped.", s: 2, why: "Uses the quote to uncover motivation: the 'inconsistencies in human behaviour' the module values." },
+      { t: "Gwen uses a simile 'living like pigs' to describe poor people, which is mean.", s: 1, why: "Identifies technique and quote, but the analysis stops at judging her." }
+    ]},
+  { weak: "Coral learns to walk in the play and gets better.",
+    options: [
+      { t: "In the play, Coral says 'I'm walking' and it is repetition which shows she is happy now.", s: 1, why: "Technique named, but no sense of the metatheatre or why repetition matters." },
+      { t: "Coral plays a mermaid and walks at the end of the play on amateur night.", s: 0, why: "Retelling." },
+      { t: "Gow's metatheatrical device allows Coral to rehearse her own recovery; as her repeated 'I'm walking' shifts from character to '[In her own voice]', fiction becomes reality and art becomes healing.", s: 2, why: "Explains how the form creates meaning." }
+    ]},
+  { weak: "The play ends with King Lear which is sad.",
+    options: [
+      { t: "Gow concludes with Tom reading Lear's 'Unburden'd crawl toward death', a devastating dramatic irony that shifts the play from comic restoration to tragic acceptance and frames individual mortality as a universal human journey.", s: 2, why: "Links structure, intertextuality and theme in one move." },
+      { t: "King Lear is another Shakespeare play and it is used for intertextuality at the end.", s: 1, why: "Names the device without explaining its effect." },
+      { t: "At the end they all read King Lear in class with Miss Latrobe.", s: 0, why: "Retelling." }
+    ]}
+];
+
+/* Common Module essentials */
+const RUBRIC_POINTS = [
+  { h: "Individual and collective experiences", p: "Each character's private pain (Coral's grief, Gwen's fear, Tom's illness) is set against shared historical experiences: Vietnam, conscription, the Depression, post-war migration." },
+  { h: "Anomalies, paradoxes and inconsistencies", p: "Harry is 'happy... even while we're very, very sad'. Gwen's cruelty comes from fear. Roy demands normality while privately suffering. These contradictions are what markers want you to explore." },
+  { h: "Storytelling and how it shapes experience", p: "Away is full of stories: the school play, 'The Stranger on the Shore', Jim's Gone with the Wind memory, King Lear. Gow shows that stories let people express what they cannot say directly." },
+  { h: "Emotions, motivations and behaviour", p: "Ask why characters act as they do. Gwen's control comes from the Depression; Roy's anger comes from helplessness; Tom's secrecy comes from love." },
+  { h: "Seeing the world differently", p: "Gow challenges the 1960s 'Lucky Country' faith in material comfort and positions the audience to value presence, honesty and compassion." }
+];
+
+const CONTEXT_POINTS = [
+  { h: "Summer 1967–68", p: "Set as Australia stood on the edge of change. Gow wrote it in the mid-1980s, looking back on the summer of his own adolescence." },
+  { h: "Vietnam and the 'nasho' ballot", p: "Conscription by birthdate ballot sent young men to war at random. Coral and Roy's son was killed; Rick 'missed out... by one number'." },
+  { h: "The Depression generation", p: "Gwen and Jim grew up in 1930s poverty ('We lived in rubbish tips'). Their materialism is a defence against that past." },
+  { h: "Post-war migration", p: "Harry and Vic are English migrants from Nottingham who have been in Australia 'eight years'. Gwen and the campers voice suspicion of 'New Australians'." },
+  { h: "The 1980s and AIDS", p: "Many critics read Tom's illness as resonating with the AIDS crisis of the time of writing: young people dying before their parents." },
+  { h: "The Shakespearean frame", p: "A Midsummer Night's Dream (magic, confusion, restoration) gives way to The Tempest (storm, island) and finally King Lear (acceptance of death)." }
+];
+
+</script>
+<script>
+/* Away Essay Workshop: app logic */
+(function () {
+  "use strict";
+  const $ = (s, el = document) => el.querySelector(s);
+  const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  const byId = id => QUOTES.find(q => q.id === id);
+  const fmtQ = q => q.q.replace(/" \/ "/g, " / ").replace(/" \.\.\. "/g, " ... ");
+  const words = s => (s.trim().match(/\S+/g) || []).length;
+
+  /* ---------- state ---------- */
+  const KEY = "awayEssayWorkshop_v1";
+  const fresh = () => ({ xp: 0, starred: [], paras: [], thesis: "", flags: {}, best: {}, draft: { theme: "S", P: "", E: "", T: "", A: "", L: "", qid: "" },
+    plan: { q: "0", qOwn: "", thesis: "", intro: "", b: ["", "", ""], conc: "" } });
+  let S = fresh();
+  try { const raw = localStorage.getItem(KEY); if (raw) S = Object.assign(fresh(), JSON.parse(raw)); } catch (e) { /* storage unavailable */ }
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { /* ignore */ } };
+
+  /* ---------- XP, levels, toast ---------- */
+  const LEVELS = [[0, "Packing Up"], [100, "On the Road"], [250, "Caravan City"], [450, "Storm Chaser"], [700, "The Beach"], [1000, "Amateur Night Star"], [1400, "Honest Puck"]];
+  function renderXP() {
+    let i = 0; while (i < LEVELS.length - 1 && S.xp >= LEVELS[i + 1][0]) i++;
+    const cur = LEVELS[i], nxt = LEVELS[i + 1];
+    $("#lvlName").textContent = cur[1];
+    $("#lvlNum").textContent = "Level " + (i + 1);
+    $("#xpText").textContent = S.xp + " XP";
+    $("#nextLvl").textContent = nxt ? "Next: " + nxt[1] + " at " + nxt[0] : "Top level reached";
+    $("#xpFill").style.width = nxt ? Math.min(100, ((S.xp - cur[0]) / (nxt[0] - cur[0])) * 100) + "%" : "100%";
+  }
+  let toastT;
+  function toast(html) {
+    const t = $("#toast"); t.innerHTML = html; t.classList.add("show");
+    clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove("show"), 2600);
+  }
+  function award(n, why) {
+    const before = levelIndex(); S.xp += n; save(); renderXP();
+    const after = levelIndex();
+    toast(after > before ? `Level up! You reached <b>${LEVELS[after][1]}</b>` : `<b>+${n} XP</b> ${esc(why || "")}`);
+    renderHome();
+  }
+  const levelIndex = () => { let i = 0; while (i < LEVELS.length - 1 && S.xp >= LEVELS[i + 1][0]) i++; return i; };
+  function flag(name, xp, why) { if (S.flags[name]) return; S.flags[name] = true; award(xp, why); }
+
+  /* ---------- quests & badges ---------- */
+  const QUESTS = [
+    { f: "star5", t: "Star 5 quotes you want to learn", s: "Quote Bank", xp: 30, go: "#quotes", test: () => S.starred.length >= 5 },
+    { f: "thesis", t: "Choose or write your thesis", s: "Thesis & Topic Sentences", xp: 20, go: "#theses", test: () => !!S.thesis },
+    { f: "tech7", t: "Score 7 or more in Technique Detective", s: "Games", xp: 40, go: "#games", test: () => (S.best.tech || 0) >= 7 },
+    { f: "petal", t: "Solve a PETAL Puzzle with every sentence in place", s: "Games", xp: 40, go: "#games", test: () => !!S.flags.petalSolved },
+    { f: "forged", t: "Save a paragraph that ticks 6 or more checks", s: "PETAL Forge", xp: 50, go: "#forge", test: () => S.paras.some(p => p.score >= 6) },
+    { f: "triad", t: "Save one paragraph for each theme", s: "PETAL Forge", xp: 60, go: "#forge", test: () => ["S", "R", "T"].every(t => S.paras.some(p => p.theme === t)) },
+    { f: "planned", t: "Complete a full essay plan", s: "Essay Planner", xp: 80, go: "#planner", test: () => !!S.flags.planDone }
+  ];
+  const BADGES = [
+    { n: "Quote Collector", d: "Star 10 quotes", test: () => S.starred.length >= 10 },
+    { n: "Sharp Eye", d: "10/10 in Technique Detective", test: () => (S.best.tech || 0) >= 10 },
+    { n: "Who's Who", d: "8+ in Who Said It?", test: () => (S.best.who || 0) >= 8 },
+    { n: "Storm Survivor", d: "6/6 in Upgrade Challenge", test: () => (S.best.upgrade || 0) >= 6 },
+    { n: "Three Families", d: "A paragraph for every theme", test: () => ["S", "R", "T"].every(t => S.paras.some(p => p.theme === t)) },
+    { n: "Opening Night", d: "Complete an essay plan", test: () => !!S.flags.planDone },
+    { n: "Honest Puck", d: "Finish every mission", test: () => QUESTS.every(q => q.test()) }
+  ];
+  function checkQuests() { QUESTS.forEach(q => { if (q.test() && !S.flags["q_" + q.f]) flag("q_" + q.f, q.xp, "Mission complete: " + q.t); }); }
+  function renderHome() {
+    $("#quests").innerHTML = QUESTS.map(q => {
+      const done = q.test();
+      return `<div class="quest ${done ? "done" : ""}"><span class="tick">${done ? "✓" : ""}</span><div style="flex:1"><b>${esc(q.t)}</b><small>${esc(q.s)} · ${q.xp} XP</small></div>${done ? "" : `<a class="btn small ghost" href="${q.go}">Go</a>`}</div>`;
+    }).join("");
+    $("#badges").innerHTML = BADGES.map(b => `<div class="badge ${b.test() ? "got" : ""}"><b>${esc(b.n)}</b>${esc(b.d)}</div>`).join("");
+  }
+  function renderThemeCards() {
+    const key = { S: 47, R: 56, T: 61 };
+    $("#themeCards").innerHTML = ["S", "R", "T"].map(t => {
+      const q = byId(key[t]); const n = QUOTES.filter(x => x.themes.includes(t)).length;
+      return `<div class="card themecard th-${t}"><span class="meta">Symbol: ${THEMES[t].symbol} · ${n} quotes</span><h3>${esc(THEMES[t].name)}</h3>
+        <blockquote>"${esc(fmtQ(q))}"<br><span class="meta">${esc(q.who)}, ${esc(q.where)}</span></blockquote>
+        <div class="row"><button class="btn small" data-qtheme="${t}">See quotes</button><button class="btn small ghost" data-ttheme="${t}">Topic sentences</button></div></div>`;
+    }).join("");
+    $$("[data-qtheme]").forEach(b => b.onclick = () => { qf.theme = b.dataset.qtheme; syncSeg("#qTheme", qf.theme); location.hash = "#quotes"; renderQuotes(); });
+    $$("[data-ttheme]").forEach(b => b.onclick = () => { tTheme = b.dataset.ttheme; syncSeg("#tTheme", tTheme); location.hash = "#theses"; renderTheses(); });
+  }
+
+  /* ---------- router ---------- */
+  const VIEWS = ["home", "quotes", "theses", "forge", "games", "planner", "module"];
+  function route() {
+    let v = location.hash.replace("#", ""); if (!VIEWS.includes(v)) v = "home";
+    VIEWS.forEach(x => $("#v-" + x).classList.toggle("on", x === v));
+    $$("nav.tabs a").forEach(a => a.setAttribute("aria-current", a.getAttribute("href") === "#" + v ? "page" : "false"));
+    if (v === "planner") renderPlanner();
+    if (v === "home") renderHome();
+    window.scrollTo(0, 0);
+  }
+  window.addEventListener("hashchange", route);
+
+  function syncSeg(sel, val) { $$(sel + " button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.v === val))); }
+  function segHandler(sel, cb) { $$(sel + " button").forEach(b => b.onclick = () => { syncSeg(sel, b.dataset.v); cb(b.dataset.v); }); }
+
+  /* ---------- quote bank ---------- */
+  const qf = { theme: "", act: "", who: "", tech: "", text: "" };
+  const speakerOf = q => q.who.split(" (")[0];
+  function initQuoteFilters() {
+    const whos = [...new Set(QUOTES.flatMap(q => q.who.split(" / ").map(w => w.split(" (")[0])))].sort();
+    $("#qWho").innerHTML += whos.map(w => `<option>${esc(w)}</option>`).join("");
+    const techs = [...new Set(QUOTES.flatMap(q => q.tech))].sort();
+    $("#qTech").innerHTML += techs.map(t => `<option>${esc(t)}</option>`).join("");
+    segHandler("#qTheme", v => { qf.theme = v; renderQuotes(); });
+    $("#qAct").onchange = e => { qf.act = e.target.value; renderQuotes(); };
+    $("#qWho").onchange = e => { qf.who = e.target.value; renderQuotes(); };
+    $("#qTech").onchange = e => { qf.tech = e.target.value; renderQuotes(); };
+    $("#qSearch").oninput = e => { qf.text = e.target.value.toLowerCase(); renderQuotes(); };
+  }
+  function quoteCard(q) {
+    const starred = S.starred.includes(q.id);
+    const main = q.themes[0];
+    return `<article class="card qcard stripe th-${main}">
+      <div class="spread"><span class="meta">${esc(q.who)} · ${esc(q.where)}</span>
+        <button class="star" data-star="${q.id}" aria-pressed="${starred}" aria-label="Star this quote">${starred ? "★ Starred" : "☆ Star"}</button></div>
+      <p class="q">${esc(fmtQ(q))}</p>
+      <div class="row">${q.tech.map(t => `<span class="chip" title="${esc(TECHNIQUES[t] || "")}">${esc(t)}</span>`).join("")}</div>
+      <p class="an">${esc(q.a)}</p>
+      <div class="spread"><div class="row">${q.themes.map(t => `<span class="pill th-${t}">${THEMES[t].short}</span>`).join("")}</div>
+        <button class="btn small ghost" data-forge="${q.id}">Use in Forge</button></div>
+    </article>`;
+  }
+  function renderQuotes() {
+    const list = QUOTES.filter(q =>
+      (!qf.theme || (qf.theme === "*" ? S.starred.includes(q.id) : q.themes.includes(qf.theme))) &&
+      (!qf.act || q.where.startsWith(qf.act)) &&
+      (!qf.who || q.who.split(" / ").some(w => w.split(" (")[0] === qf.who)) &&
+      (!qf.tech || q.tech.includes(qf.tech)) &&
+      (!qf.text || (q.q + " " + q.a + " " + q.who).toLowerCase().includes(qf.text)));
+    $("#qCount").textContent = `Showing ${list.length} of ${QUOTES.length} quotes · ${S.starred.length} starred`;
+    $("#qList").innerHTML = list.length ? list.map(quoteCard).join("") : `<div class="card">No quotes match these filters. Try clearing the search or choosing All.</div>`;
+    $$("[data-star]", $("#qList")).forEach(b => b.onclick = () => toggleStar(+b.dataset.star));
+    $$("[data-forge]", $("#qList")).forEach(b => b.onclick = () => sendQuoteToForge(+b.dataset.forge));
+  }
+  function toggleStar(id) {
+    const i = S.starred.indexOf(id);
+    if (i >= 0) S.starred.splice(i, 1); else S.starred.push(id);
+    save(); renderQuotes(); checkQuests(); renderHome();
+  }
+
+  /* ---------- theses ---------- */
+  let tTheme = "S";
+  function thesisItem(t, extra = "") {
+    const mine = S.thesis === t;
+    return `<div class="titem ${mine ? "mine" : ""}"><p>${esc(t)}${extra}</p><div class="acts"><button class="btn small ${mine ? "" : "ghost"}" data-thesis="${esc(t)}">${mine ? "My thesis ✓" : "Use this"}</button></div></div>`;
+  }
+  function renderTheses() {
+    $("#overallList").innerHTML = OVERALL_THESES.map(t => thesisItem(t)).join("");
+    const tb = THEME_BANK[tTheme];
+    $("#tThesisHead").textContent = "Theses on " + THEMES[tTheme].name.toLowerCase();
+    $("#themeThesisList").innerHTML = tb.theses.map(t => thesisItem(t)).join("");
+    $("#topicList").innerHTML = tb.topics.map((tp, i) => `<div class="titem"><div style="flex:1"><p>${esc(tp.t)}</p>
+      <div class="topicq">${tp.quotes.map(id => { const q = byId(id); return `<span class="chip" title="${esc(fmtQ(q))}">${esc(speakerOf(q))}: ${esc(q.where.replace("Act ", "").replace(", Scene ", "."))}</span>`; }).join("")}</div></div>
+      <div class="acts"><button class="btn small" data-topic="${i}">Forge this</button></div></div>`).join("");
+    $$("[data-thesis]").forEach(b => b.onclick = () => { S.thesis = b.dataset.thesis; S.plan.thesis = S.thesis; save(); renderTheses(); checkQuests(); toast("Thesis saved. It will appear in your Essay Planner."); });
+    $$("[data-topic]").forEach(b => b.onclick = () => {
+      const tp = THEME_BANK[tTheme].topics[+b.dataset.topic];
+      S.draft.theme = tTheme; S.draft.P = tp.t; S.draft.qid = String(tp.quotes[0]); save();
+      loadForge(); location.hash = "#forge";
+    });
+  }
+  segHandler("#tTheme", v => { tTheme = v; renderTheses(); });
+  $("#saveOwnThesis").onclick = () => {
+    const v = $("#ownThesis").value.trim();
+    if (words(v) < 12) { toast("Write a full sentence of at least 12 words first."); return; }
+    S.thesis = v; S.plan.thesis = v; save(); renderTheses(); checkQuests(); toast("Your own thesis is saved.");
+  };
+
+  /* ---------- forge ---------- */
+  const VERBS = ["reveals", "exposes", "illuminates", "underscores", "challenges", "suggests", "captures", "evokes", "positions the audience to", "highlights"];
+  const LINKS = ["Thus, Gow suggests that ", "In this way, Gow reveals that ", "Ultimately, Away illuminates how ", "Consequently, the audience recognises that "];
+  const TECH_WORDS = Object.keys(TECHNIQUES).map(t => t.toLowerCase()).concat(["stage direction", "play-within-a-play", "symbol", "allusion", "contrast", "foreshadow", "structure", "characterisation", "dialogue"]);
+  const CONTEXT_WORDS = ["vietnam", "war", "depression", "1960s", "1967", "1968", "conscription", "nasho", "migrant", "immigra", "class", "aids", "shakespeare", "post-war", "era", "society", "suburban", "australia"];
+  const THEME_WORDS = ["suffer", "grief", "griev", "loss", "pain", "relationship", "connection", "family", "love", "transform", "healing", "heal", "reconcil", "human", "experience", "isolation", "accept"];
+  const ANALYSIS_VERBS = ["reveal", "expos", "illuminat", "underscor", "challeng", "suggest", "captur", "evok", "position", "highlight", "convey", "emphasis", "invit", "critique", "signal"];
+  const LINK_WORDS = ["thus", "therefore", "ultimately", "in this way", "consequently", "hence", "thereby", "overall"];
+
+  function quoteOptions(theme) {
+    const inTheme = QUOTES.filter(q => q.themes.includes(theme));
+    const star = inTheme.filter(q => S.starred.includes(q.id));
+    const rest = inTheme.filter(q => !S.starred.includes(q.id));
+    const opt = q => `<option value="${q.id}">${esc(speakerOf(q))} (${esc(q.where.replace("Act ", "").replace(", Scene ", "."))}): ${esc(fmtQ(q).slice(0, 70))}${fmtQ(q).length > 70 ? "…" : ""}</option>`;
+    return `<option value="">Choose a quote…</option>` + (star.length ? `<optgroup label="★ Your starred quotes">${star.map(opt).join("")}</optgroup>` : "") +
+      `<optgroup label="${THEMES[theme].short} quotes">${rest.map(opt).join("")}</optgroup>`;
+  }
+  function insertAt(id, text) {
+    const ta = $("#" + id); const v = ta.value;
+    ta.value = v && !/\s$/.test(v) ? v + " " + text : v + text;
+    ta.focus(); onForgeInput();
+  }
+  function leadIns(q) {
+    const sp = q.who === "Stage direction" ? null : speakerOf(q).split(" / ")[0];
+    const text = fmtQ(q);
+    if (!sp) return [`Gow's stage direction, '${text}', `, `In ${q.where}, the stage direction notes that '${text}'`];
+    return [`When ${sp} says, '${text}', `, `In ${q.where}, ${sp} declares, '${text}'`, `${sp}'s line, '${text}', `];
+  }
+  function renderForgeQuote() {
+    const q = byId(+$("#fQuote").value);
+    if (!q) { $("#fLeadIns").innerHTML = ""; $("#fTechs").innerHTML = `<span class="hint">Choose a quote to see its techniques.</span>`; $("#fAnalysisNote").textContent = ""; return; }
+    $("#fLeadIns").innerHTML = leadIns(q).map((l, i) => `<button class="chip" type="button" data-lead="${i}">${esc(l.slice(0, 44))}…</button>`).join("");
+    $$("[data-lead]").forEach(b => b.onclick = () => insertAt("fE", leadIns(q)[+b.dataset.lead]));
+    $("#fTechs").innerHTML = q.tech.map(t => `<button class="chip" type="button" data-tech="${esc(t)}" title="${esc(TECHNIQUES[t] || "")}">${esc(t)}</button>`).join("");
+    $$("[data-tech]").forEach(b => b.onclick = () => insertAt("fT", `Gow's use of ${b.dataset.tech.toLowerCase()} `));
+    $("#fAnalysisNote").innerHTML = `<b>Ideas to develop, in your own words:</b> ${esc(q.a)}`;
+  }
+  function loadForge() {
+    const d = S.draft;
+    $("#fTheme").value = d.theme || "S";
+    fillTopicPick();
+    $("#fQuote").innerHTML = quoteOptions($("#fTheme").value);
+    $("#fQuote").value = d.qid || "";
+    ["P", "E", "T", "A", "L"].forEach(k => $("#f" + k).value = d[k] || "");
+    renderForgeQuote(); onForgeInput(true);
+  }
+  function fillTopicPick() {
+    const t = $("#fTheme").value;
+    $("#fTopicPick").innerHTML = `<option value="">Choose a ready-made topic sentence, or write your own below</option>` +
+      THEME_BANK[t].topics.map((tp, i) => `<option value="${i}">${esc(tp.t.slice(0, 90))}…</option>`).join("");
+  }
+  function sendQuoteToForge(id) {
+    const q = byId(id);
+    S.draft.qid = String(id);
+    if (!q.themes.includes(S.draft.theme)) S.draft.theme = q.themes[0];
+    save(); loadForge(); location.hash = "#forge";
+  }
+  function forgeChecks() {
+    const d = { P: $("#fP").value, E: $("#fE").value, T: $("#fT").value, A: $("#fA").value, L: $("#fL").value };
+    const all = Object.values(d).join(" ").toLowerCase();
+    const has = (arr, s) => arr.some(w => s.includes(w));
+    const n = words(Object.values(d).join(" "));
+    return [
+      ["Point names Gow and makes a claim", /gow/i.test(d.P) && words(d.P) >= 10],
+      ["Quote is embedded in your sentence", /['"‘“]/.test(d.E) && words(d.E) >= 8],
+      ["Technique is named", has(TECH_WORDS, (d.T + " " + d.E).toLowerCase())],
+      ["Strong analytical verb", has(ANALYSIS_VERBS, (d.A + d.T).toLowerCase())],
+      ["Analysis goes deep (40+ words)", words(d.A) >= 40],
+      ["Theme and human experience named", has(THEME_WORDS, all)],
+      ["Context woven in", has(CONTEXT_WORDS, all)],
+      ["Link ties back to the thesis", words(d.L) >= 8 && has(LINK_WORDS, d.L.toLowerCase())],
+      ["Length 150–300 words", n >= 150 && n <= 300]
+    ];
+  }
+  function onForgeInput(skipSave) {
+    const d = S.draft;
+    d.theme = $("#fTheme").value; d.qid = $("#fQuote").value;
+    ["P", "E", "T", "A", "L"].forEach(k => d[k] = $("#f" + k).value);
+    if (!skipSave) save();
+    const parts = ["P", "E", "T", "A", "L"].filter(k => d[k].trim());
+    $("#fPreview").innerHTML = parts.length ? parts.map(k => `<span class="${k}">${esc(d[k].trim())}</span>`).join(" ") : `<span class="hint">Your paragraph appears here as you type. Each part is colour-coded so you can see whether your analysis outweighs your evidence.</span>`;
+    const text = parts.map(k => d[k].trim()).join(" ");
+    $("#fWords").textContent = words(text) + " words";
+    const cks = forgeChecks(); const score = cks.filter(c => c[1]).length;
+    $("#fChecks").innerHTML = cks.map(c => `<div class="ck ${c[1] ? "ok" : ""}"><i>${c[1] ? "✓" : ""}</i><span>${esc(c[0])}</span></div>`).join("");
+    $("#fMeter").innerHTML = cks.map((c, i) => `<b class="${i < score ? "on" : ""}"></b>`).join("");
+    $("#fBand").textContent = score <= 2 ? "Getting started" : score <= 4 ? "C range: Reteller" : score <= 6 ? "B range: Technician" : score <= 8 ? "High B: almost there" : "A range: Analyst";
+    return { text, score };
+  }
+  $("#fTheme").onchange = () => { fillTopicPick(); $("#fQuote").innerHTML = quoteOptions($("#fTheme").value); renderForgeQuote(); onForgeInput(); };
+  $("#fTopicPick").onchange = e => { if (e.target.value === "") return; const tp = THEME_BANK[$("#fTheme").value].topics[+e.target.value]; $("#fP").value = tp.t; if (!$("#fQuote").value) { $("#fQuote").value = String(tp.quotes[0]); renderForgeQuote(); } onForgeInput(); };
+  $("#fQuote").onchange = () => { renderForgeQuote(); onForgeInput(); };
+  ["P", "E", "T", "A", "L"].forEach(k => $("#f" + k).addEventListener("input", () => onForgeInput()));
+  $("#fVerbs").innerHTML = VERBS.map(v => `<button class="chip" type="button" data-verb="${v}">${v}</button>`).join("");
+  $$("[data-verb]").forEach(b => b.onclick = () => insertAt("fA", "Gow " + b.dataset.verb + " "));
+  $("#fLinks").innerHTML = LINKS.map((l, i) => `<button class="chip" type="button" data-link="${i}">${esc(l.trim())}…</button>`).join("");
+  $$("[data-link]").forEach(b => b.onclick = () => insertAt("fL", LINKS[+b.dataset.link]));
+  $("#fSave").onclick = () => {
+    const r = onForgeInput();
+    if (words(r.text) < 40) { toast("Write a bit more before saving: aim for all five PETAL parts."); return; }
+    S.paras.unshift({ id: Date.now(), theme: $("#fTheme").value, text: r.text, score: r.score });
+    save(); renderSaved();
+    award(r.score >= 6 ? 25 : 10, "Paragraph saved");
+    checkQuests();
+  };
+  $("#fCopy").onclick = () => copyText(onForgeInput().text, $("#fPreview"));
+  $("#fClear").onclick = () => { ["P", "E", "T", "A", "L"].forEach(k => $("#f" + k).value = ""); $("#fQuote").value = ""; $("#fTopicPick").value = ""; renderForgeQuote(); onForgeInput(); };
+  let modelShown = false;
+  $("#fModel").onclick = () => {
+    const box = $("#fModelBox");
+    if (modelShown) { box.remove(); modelShown = false; $("#fModel").textContent = "Show a model paragraph"; return; }
+    const m = MODEL_PARAS.find(x => x.theme === $("#fTheme").value);
+    const el = document.createElement("div"); el.id = "fModelBox"; el.className = "card";
+    el.innerHTML = `<h3 style="margin-bottom:8px">Model paragraph: ${esc(THEMES[m.theme].name)}</h3><div class="para">${m.parts.map(p => `<span class="${p[0]}">${esc(p[1])}</span>`).join(" ")}</div><p class="hint" style="margin-top:8px">Notice that the analysis is the longest part, and that every sentence starts from what Gow is doing.</p>`;
+    $(".preview").insertBefore(el, $(".preview").children[1]);
+    modelShown = true; $("#fModel").textContent = "Hide model paragraph";
+  };
+  function renderSaved() {
+    $("#fSaved").innerHTML = S.paras.length ? S.paras.map(p => `<div class="titem stripe th-${p.theme}"><p style="font-size:.92rem">${esc(p.text.slice(0, 160))}…<br><span class="meta">${THEMES[p.theme].short} · ${p.score}/9 checks</span></p>
+      <div class="acts"><button class="btn small ghost" data-copyp="${p.id}">Copy</button><button class="btn small ghost" data-delp="${p.id}">Delete</button></div></div>`).join("") : `<p class="hint">No saved paragraphs yet. Your saved paragraphs feed into the Essay Planner.</p>`;
+    $$("[data-delp]").forEach(b => b.onclick = () => { S.paras = S.paras.filter(p => p.id !== +b.dataset.delp); save(); renderSaved(); });
+    $$("[data-copyp]").forEach(b => b.onclick = () => { const p = S.paras.find(x => x.id === +b.dataset.copyp); copyText(p.text); });
+  }
+
+  /* ---------- copy helper ---------- */
+  function copyText(text, el) {
+    if (!text.trim()) { toast("There's nothing to copy yet."); return; }
+    try {
+      navigator.clipboard.writeText(text).then(() => toast("Copied. Paste it into your document."), () => fallback());
+    } catch (e) { fallback(); }
+    function fallback() {
+      if (el) { const r = document.createRange(); r.selectNodeContents(el); const s = getSelection(); s.removeAllRanges(); s.addRange(r); }
+      toast("Copy was blocked here. The text is selected: press Ctrl+C or Cmd+C.");
+    }
+  }
+
+  /* ---------- games ---------- */
+  let G = null;
+  $$("#gamePick .gcard").forEach(b => b.onclick = () => startGame(b.dataset.g));
+  function renderBest() { $$("[data-best]").forEach(s => { const v = S.best[s.dataset.best]; s.textContent = v != null ? "Best: " + v : "Not played yet"; }); }
+  function setBest(g, v) { if ((S.best[g] || 0) < v) { S.best[g] = v; save(); } renderBest(); checkQuests(); renderHome(); }
+  function startGame(g) {
+    $$("#gamePick .gcard").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.g === g)));
+    if (g === "tech") G = { g, i: 0, score: 0, rounds: shuffle(QUOTES).slice(0, 10) };
+    if (g === "who") { const pool = QUOTES.filter(q => q.who !== "Stage direction" && !q.who.includes(" / ")); G = { g, i: 0, score: 0, rounds: shuffle(pool).slice(0, 10) }; }
+    if (g === "upgrade") G = { g, i: 0, score: 0, rounds: shuffle(UPGRADES) };
+    if (g === "petal") { const k = ((S.best.petalIdx || 0) + 1) % MODEL_PARAS.length; S.best.petalIdx = k; save(); G = { g, para: MODEL_PARAS[k], order: [], shuffled: shuffle(MODEL_PARAS[k].parts.map((p, i) => i)) }; }
+    drawGame();
+    $("#stage").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  function drawGame() {
+    const st = $("#stage");
+    if (!G) { st.innerHTML = `<h3>Choose a game above to start.</h3><p class="hint" style="margin-top:8px">Technique Detective and Who Said It? use the full quote bank, so every round is different.</p>`; return; }
+    if (G.g === "petal") return drawPetal(st);
+    if (G.i >= G.rounds.length) return drawEnd(st);
+    const r = G.rounds[G.i];
+    let prompt, opts, correct;
+    if (G.g === "tech") {
+      correct = r.tech[0];
+      const others = shuffle(Object.keys(TECHNIQUES).filter(t => !r.tech.includes(t))).slice(0, 3);
+      opts = shuffle([correct, ...others]);
+      prompt = `<p class="meta">${esc(r.who)} · ${esc(r.where)}</p><p class="gq">"${esc(fmtQ(r))}"</p><p style="margin-top:8px"><b>Which technique is Gow using here?</b></p>`;
+    } else if (G.g === "who") {
+      correct = speakerOf(r);
+      const cast = ["Tom", "Meg", "Gwen", "Jim", "Roy", "Coral", "Harry", "Vic", "Rick"];
+      opts = shuffle([correct, ...shuffle(cast.filter(c => c !== correct)).slice(0, 3)]);
+      prompt = `<p class="meta">${esc(r.where)}</p><p class="gq">"${esc(fmtQ(r))}"</p><p style="margin-top:8px"><b>Who says it?</b></p>`;
+    } else {
+      opts = shuffle(r.options.map((o, i) => i));
+      prompt = `<p class="meta">Weak sentence</p><p class="gq">"${esc(r.weak)}"</p><p style="margin-top:8px"><b>Which rewrite would score highest?</b></p>`;
+    }
+    st.innerHTML = `<div class="spread"><span class="score">Round ${G.i + 1} of ${G.rounds.length}</span><span class="score">Score ${G.score}</span></div>${prompt}
+      <div class="opts">${opts.map((o, k) => `<button class="opt" data-k="${k}">${esc(G.g === "upgrade" ? r.options[o].t : o)}</button>`).join("")}</div><div id="gfb"></div>`;
+    $$(".opt", st).forEach(b => b.onclick = () => {
+      const k = +b.dataset.k; const pick = opts[k];
+      const ok = G.g === "upgrade" ? r.options[pick].s === 2 : pick === correct;
+      $$(".opt", st).forEach((x, j) => { x.disabled = true; const o = opts[j]; const isRight = G.g === "upgrade" ? r.options[o].s === 2 : o === correct; if (isRight) x.classList.add("right"); else if (j === k) x.classList.add("wrong"); });
+      if (ok) { G.score++; award(10, "Correct"); }
+      let fb;
+      if (G.g === "tech") fb = `<b>${esc(correct)}:</b> ${esc(TECHNIQUES[correct])}<br><br>${esc(r.a)}${r.tech.length > 1 ? `<br><br><span class="meta">Also at work: ${r.tech.slice(1).map(esc).join(", ")}</span>` : ""}`;
+      else if (G.g === "who") fb = `<b>${esc(r.who)}</b>, ${esc(r.where)}. ${esc(r.a)}`;
+      else fb = r.options.slice().sort((a, b) => b.s - a.s).map(o => `<p style="margin-bottom:6px"><b>${["C", "B", "A"][o.s]}:</b> ${esc(o.why)}</p>`).join("");
+      $("#gfb").innerHTML = `<div class="fb">${ok ? "<b style='color:var(--good)'>Correct.</b> " : "<b style='color:var(--bad)'>Not quite.</b> "}${fb}</div><div style="margin-top:12px"><button class="btn" id="gnext">${G.i + 1 < G.rounds.length ? "Next round" : "See results"}</button></div>`;
+      $("#gnext").onclick = () => { G.i++; drawGame(); };
+      $("#gnext").focus();
+    });
+  }
+  function drawEnd(st) {
+    setBest(G.g, G.score);
+    const total = G.rounds.length;
+    const msg = G.score === total ? "Perfect round." : G.score >= total * 0.7 ? "Strong work." : "Keep practising. Every round uses different quotes.";
+    st.innerHTML = `<h3 style="font-family:var(--display);font-weight:400;font-size:1.8rem;color:var(--sea)">${G.score} / ${total}</h3><p style="margin:8px 0 14px">${msg}</p><button class="btn" id="again">Play again</button>`;
+    $("#again").onclick = () => startGame(G.g);
+  }
+  function drawPetal(st) {
+    const P = G.para, placed = G.order.length;
+    const done = placed === P.parts.length;
+    st.innerHTML = `<div class="spread"><span class="score">Model paragraph: ${esc(THEMES[P.theme].name)}</span><span class="score">${placed} / 5 placed</span></div>
+      <p style="margin-top:8px"><b>Click the sentences in PETAL order:</b> Point, Evidence, Technique, Analysis, Link.</p>
+      <div class="puzzle">${G.shuffled.map(i => { const pos = G.order.indexOf(i); const cls = pos >= 0 ? "placed" + (done ? (pos === i ? " right" : " wrong") : "") : "";
+        return `<button class="pz ${cls}" data-i="${i}" ${pos >= 0 || done ? "disabled" : ""}><span class="slot">${pos >= 0 ? "PETAL"[pos] : ""}</span><span>${esc(P.parts[i][1])}</span></button>`; }).join("")}</div>
+      <div id="pzfb"></div>`;
+    $$(".pz", st).forEach(b => b.onclick = () => { G.order.push(+b.dataset.i); drawPetal(st); });
+    if (done) {
+      const right = G.order.filter((v, pos) => v === pos).length;
+      if (right === 5) { S.flags.petalSolved = true; save(); }
+      award(right * 10, `${right} of 5 in place`);
+      setBest("petal", right);
+      $("#pzfb").innerHTML = `<div class="fb">${right === 5 ? "<b style='color:var(--good)'>All five in place.</b> " : `<b>${right} of 5 correct.</b> Green borders are in the right place. `}Look at how the Analysis sentence is the longest and explains <i>why</i> Gow made his choice.</div>
+        <div class="row" style="margin-top:12px"><button class="btn" id="pzNext">Try another paragraph</button><button class="btn ghost" id="pzRetry">Retry this one</button></div>`;
+      $("#pzNext").onclick = () => startGame("petal");
+      $("#pzRetry").onclick = () => { G.order = []; G.shuffled = shuffle(G.shuffled); drawPetal(st); };
+    }
+  }
+
+  /* ---------- planner ---------- */
+  const CONC_STARTERS = ["Ultimately, Away suggests that ", "Through Coral, Gwen and Tom's family, Gow reveals that ", "Gow's play invites audiences to recognise that "];
+  function paraOptions(sel) {
+    return `<option value="">Choose a saved paragraph…</option>` + S.paras.map(p => `<option value="${p.id}" ${String(p.id) === String(sel) ? "selected" : ""}>${THEMES[p.theme].short}: ${esc(p.text.slice(0, 80))}…</option>`).join("");
+  }
+  function renderPlanner() {
+    const P = S.plan;
+    $("#pQ").innerHTML = QUESTIONS.map((q, i) => `<option value="${i}">${esc(q)}</option>`).join("");
+    $("#pQ").value = P.q; $("#pQOwn").value = P.qOwn;
+    if (!P.thesis && S.thesis) P.thesis = S.thesis;
+    $("#pThesis").value = P.thesis; $("#pIntro").value = P.intro; $("#pConc").value = P.conc;
+    ["pB1", "pB2", "pB3"].forEach((id, i) => $("#" + id).innerHTML = paraOptions(P.b[i]));
+    renderEssay();
+  }
+  function renderEssay() {
+    const P = S.plan;
+    const body = P.b.map(id => (S.paras.find(p => String(p.id) === String(id)) || {}).text).filter(Boolean);
+    const parts = [P.intro, ...body, P.conc].map(s => (s || "").trim()).filter(Boolean);
+    const q = P.qOwn.trim() || QUESTIONS[+P.q];
+    $("#pOut").innerHTML = parts.length ? `<p class="meta" style="margin-bottom:10px">${esc(q)}</p>` + esc(parts.join("\n\n")) : `<span class="hint">Your essay builds here as you fill in each step. Save paragraphs in the PETAL Forge first so you can choose them as body paragraphs.</span>`;
+    $("#pWords").textContent = words(parts.join(" ")) + " words";
+  }
+  function planInput() {
+    const P = S.plan;
+    P.q = $("#pQ").value; P.qOwn = $("#pQOwn").value; P.thesis = $("#pThesis").value; P.intro = $("#pIntro").value; P.conc = $("#pConc").value;
+    P.b = ["pB1", "pB2", "pB3"].map(id => $("#" + id).value);
+    save(); renderEssay();
+  }
+  ["pQ", "pQOwn", "pThesis", "pIntro", "pConc", "pB1", "pB2", "pB3"].forEach(id => { $("#" + id).addEventListener("input", planInput); $("#" + id).addEventListener("change", planInput); });
+  $("#pIntroDraft").onclick = () => {
+    const P = S.plan;
+    const th = P.thesis.trim() || S.thesis;
+    if (!th) { toast("Choose or write a thesis first."); return; }
+    const themes = [...new Set(P.b.map(id => (S.paras.find(p => String(p.id) === String(id)) || {}).theme).filter(Boolean))];
+    const names = (themes.length ? themes : ["S", "R", "T"]).map(t => THEMES[t].name.toLowerCase());
+    const list = names.length > 1 ? names.slice(0, -1).join(", ") + " and " + names[names.length - 1] : names[0];
+    P.intro = `Human experiences of loss, love and change are rarely simple; they are shaped by the contradictions within people and the societies they live in. Michael Gow's Away (1986), set over the summer of 1967–68, follows three Australian families whose holidays are shadowed by war, illness and the memory of poverty. ${th} Through the journey "away" from suburban routine to a storm-swept coast, Gow explores ${list}.`;
+    $("#pIntro").value = P.intro; save(); renderEssay();
+    toast("Draft added. Rewrite it in your own voice.");
+  };
+  $("#pConcStarters").innerHTML = CONC_STARTERS.map((c, i) => `<button class="chip" type="button" data-cs="${i}">${esc(c.trim())}…</button>`).join("");
+  $$("[data-cs]").forEach(b => b.onclick = () => { insertPlan("pConc", CONC_STARTERS[+b.dataset.cs]); });
+  function insertPlan(id, text) { const ta = $("#" + id); ta.value = ta.value && !/\s$/.test(ta.value) ? ta.value + " " + text : ta.value + text; ta.focus(); planInput(); }
+  $("#pCopy").onclick = () => {
+    const P = S.plan;
+    const body = P.b.map(id => (S.paras.find(p => String(p.id) === String(id)) || {}).text).filter(Boolean);
+    copyText([P.intro, ...body, P.conc].map(s => (s || "").trim()).filter(Boolean).join("\n\n"), $("#pOut"));
+  };
+  $("#pDone").onclick = () => {
+    const P = S.plan; const nb = P.b.filter(Boolean).length;
+    const missing = [];
+    if (words(P.thesis) < 12) missing.push("a thesis");
+    if (words(P.intro) < 40) missing.push("an introduction of 40+ words");
+    if (nb < 3) missing.push(`${3 - nb} more body paragraph${3 - nb > 1 ? "s" : ""}`);
+    if (words(P.conc) < 40) missing.push("a conclusion of 40+ words");
+    if (missing.length) { toast("Still needed: " + missing.join(", ") + "."); return; }
+    S.flags.planDone = true; save(); checkQuests(); toast("Essay plan complete. Copy it into your document to keep it.");
+  };
+
+  /* ---------- module page ---------- */
+  $("#rubric").innerHTML = RUBRIC_POINTS.map(r => `<div><h3 style="margin-bottom:4px">${esc(r.h)}</h3><p>${esc(r.p)}</p></div>`).join("");
+  $("#context").innerHTML = CONTEXT_POINTS.map(r => `<div><h3 style="margin-bottom:4px">${esc(r.h)}</h3><p>${esc(r.p)}</p></div>`).join("");
+
+  /* ---------- boot ---------- */
+  initQuoteFilters(); renderQuotes(); renderTheses(); renderThemeCards(); loadForge(); renderSaved(); renderBest(); drawGame(); renderXP(); renderHome();
+  route();
+})();
+
+</script>
+</body>
+</html>
